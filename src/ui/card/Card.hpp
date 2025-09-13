@@ -34,7 +34,8 @@ public:
     static raylib::Vector2 GetScreenSize() { return screenSize; }
     static raylib::Vector2 GetPosition() { return position; }
     static int GetSquareSize() { return squareSize; }
-
+    
+    friend class Animation;
 private:
     static void InitializeStatic() {
         if (!initialized) {
@@ -47,8 +48,8 @@ private:
 
     static void UpdatePosition() {
         position = raylib::Vector2(
-            (screenSize.x - squareSize) / 2.0f,
-            (screenSize.y - squareSize) / 2.0f
+            screenSize.x / 2.0f,
+            (screenSize.y + squareSize) / 2.0f
         );
     }
 
