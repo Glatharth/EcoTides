@@ -39,14 +39,19 @@ void Animation::draw() {
     raylib::Vector2 position = Card::GetPosition();
     position.x += dragOffsetX;
 
-    Rectangle sourceRec = {0, 0, (float)card->texture.width, (float)card->texture.height};
-    Vector2 origin = {0, 0};
+    Rectangle sourceRec = { 0, 0, (float)card->texture.width, (float)card->texture.height };
+    Vector2 origin = { card->texture.width / 2.0f, (float)card->texture.height };
+
+    float adjustX = 220.0f;
+    float adjustY = 450.0f;
+
     Rectangle destRec = {
-        position.x - card->texture.width / 2.0f,
-        position.y - card->texture.height,
+        position.x - origin.x + adjustX,
+        position.y - origin.y + adjustY,
         (float)card->texture.width,
         (float)card->texture.height
     };
-    
+
     DrawTexturePro(card->texture, sourceRec, destRec, origin, rotation, WHITE);
 }
+
