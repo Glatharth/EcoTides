@@ -1,5 +1,5 @@
 #include "Animation.hpp"
-#include "../card/Card.hpp"
+#include "ui/card/Card.hpp"
 #include <raylib.h>
 
 Animation::Animation(Card* card) : card(card) {}

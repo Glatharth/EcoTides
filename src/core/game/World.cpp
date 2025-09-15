@@ -2,7 +2,7 @@
 #include <raylib-cpp.hpp>
 
 World::World() : dummy(0) {
-    card = new Card("C:/Users/Lenovo/Downloads/cartaTeste.png");
+    card = new Card("assets/card.png");
     animation = new Animation(card);
 }
 
