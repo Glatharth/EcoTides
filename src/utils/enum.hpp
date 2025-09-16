@@ -1,8 +1,8 @@
 #pragma once
 #include <raylib-cpp.hpp>
 
-enum class GameScreen : int {
-    MENU = 0,
+enum class ScreenState {
+    MENU,
     GAME,
     OPTIONS,
     VICTORY,
