@@ -3,22 +3,16 @@
 #define ECOTIDES_CARD_HPP
 
 #include <raylib-cpp.hpp>
+#include <string>
+#include <memory>
+
+#include "utils/enum.hpp"
 
 class Card {
 public:
-    explicit Card(const std::string& filePath) {
-        InitializeStatic();
-        image = new raylib::Image(filePath);
-        image->ResizeNN(squareSize, squareSize);
-        texture = image->LoadTexture();
-        // texture.SetFilter(TEXTURE_FILTER_BILINEAR); // Não lembro se precisa incluir ou se era teste :)
-    }
+    explicit Card(int cardId);
 
-    ~Card() {
-        texture.Unload();
-        image->Unload();
-        delete image;
-    }
+    ~Card();
 
     void Draw(const raylib::Color& color = WHITE) const;
 
@@ -34,8 +28,14 @@ public:
     static raylib::Vector2 GetScreenSize() { return screenSize; }
     static raylib::Vector2 GetPosition() { return position; }
     static int GetSquareSize() { return squareSize; }
-    
+
+    int GetId() const { return id; }
+    std::string GetPath() const { return path; }
+    EventType GetEventType() const { return eventType; }
+    bool IsLoaded() const { return loaded; }
+
     friend class Animation;
+
 private:
     static void InitializeStatic() {
         if (!initialized) {
@@ -53,12 +53,19 @@ private:
         );
     }
 
+    bool LoadImage();
+
     inline static raylib::Vector2 screenSize = {0, 0};
     inline static raylib::Vector2 position = {0, 0};
     static constexpr int squareSize = 7 * 64;
     inline static bool initialized = false;
 
-    raylib::Image* image;
+    int id = -1;
+    std::string path;
+    EventType eventType;
+    bool loaded = false;
+
+    raylib::Image* image = nullptr;
     raylib::Texture texture{};
 };
 

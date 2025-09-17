@@ -1,2 +1,8 @@
 #pragma once
-#include <raylib-cpp.hpp>
+
+enum class EventType {
+    UNKNOWN,
+    CREATE,
+    MODIFY,
+    DELETE,
+};
