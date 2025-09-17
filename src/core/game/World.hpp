@@ -16,6 +16,8 @@ private:
     Card* card;
     Animation* animation;
     int dummy;
+    int cardIndex = 0;
+    int cardIds[4];
 };
 
 #endif // ECOTIDES_WORLD_HPP

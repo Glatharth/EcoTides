@@ -78,7 +78,6 @@ void Animation::update(float delta) {
 void Animation::draw() {
     float normDrag = dragOffsetX / 150.0f;
     float rotation = maxRotation * normDrag;
-
     raylib::Vector2 position = Card::GetPosition();
     position.x += dragOffsetX;
 
@@ -96,7 +95,22 @@ void Animation::draw() {
     };
 
     DrawTexturePro(card->texture, sourceRec, destRec, origin, rotation, WHITE);
+
+    if (normDrag > 0.3f) {
+        Rectangle overlayRect = {destRec.x - 50, destRec.y - 420, 100, 50};
+        Color grayTransparent = {128, 128, 128, (unsigned char)(normDrag * 255)};
+        DrawRectangleRec(overlayRect, grayTransparent);
+
+        DrawText("SIM", (int)overlayRect.x + 10, (int)overlayRect.y + 10, 40, ColorAlpha(GREEN, normDrag));
+    } else if (normDrag < -0.3f) {
+        Rectangle overlayRect = {destRec.x - 50, destRec.y - 420, 100, 50};
+        Color grayTransparent = {128, 128, 128, (unsigned char)(-normDrag * 255)};
+        DrawRectangleRec(overlayRect, grayTransparent);
+
+        DrawText("NÃO", (int)overlayRect.x + 10, (int)overlayRect.y + 10, 40, ColorAlpha(RED, -normDrag));
+    }
 }
+
 void Animation::setCard(Card* newCard) {
     card = newCard;
 }
@@ -108,4 +122,3 @@ bool Animation::needsCardSwap() const {
 void Animation::resetSwap() {
     cardSwapFlag = false;
 }
-
