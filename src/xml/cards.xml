@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cards>
-    <card id="1" path="assets/card.png" eventType="CREATE">
+    <card id="1" path="assets/card1.png" eventType="CREATE">
         <parents>
             <parent id="100" steps="2"/>
             <parent id="101" steps="1"/>
@@ -8,16 +8,23 @@
         </parents>
     </card>
 
-    <!--    <card id="2" path="/caminho/para/arquivo2.jpg" eventType="MODIFY">-->
-    <!--        <parents>-->
-    <!--            <parent id="200" steps="1"/>-->
-    <!--            <parent id="201" steps="2"/>-->
-    <!--        </parents>-->
-    <!--    </card>-->
+    <card id="2" path="assets/card2.png" eventType="CREATE">
+        <parents>
+            <parent id="200" steps="1"/>
+            <parent id="201" steps="2"/>
+        </parents>
+    </card>
 
-    <!--    <card id="3" path="/caminho/para/pasta/" eventType="DELETE">-->
-    <!--        <parents>-->
-    <!--            <parent id="300" steps="0"/>-->
-    <!--        </parents>-->
-    <!--    </card>-->
+    <card id="3" path="assets/card3.png" eventType="CREATE">
+        <parents>
+            <parent id="300" steps="0"/>
+        </parents>
+    </card>
+
+    <card id="4" path="assets/card4.png" eventType="CREATE">
+        <parents>
+            <parent id="400" steps="1"/>
+            <parent id="401" steps="2"/>
+        </parents>
+    </card>
 </cards>

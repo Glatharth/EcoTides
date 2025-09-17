@@ -2,7 +2,8 @@
 #include <raylib-cpp.hpp>
 
 World::World() : dummy(0) {
-    card = new Card("assets/card4.png");
+    int initialCardId = 4;
+    card = new Card(initialCardId);
     animation = new Animation(card);
 }
 
@@ -19,18 +20,14 @@ void World::cardSwap() {
     static int cardIndex = 0;
     delete card;
 
-    const char* cardPaths[] = {
-        "assets/card1.png",
-        "assets/card2.png",
-        "assets/card3.png",
-        "assets/card4.png"
-    };
+    const int cardIds[] = {1, 2, 3, 4};
 
-    card = new Card(cardPaths[cardIndex]);
+    card = new Card(cardIds[cardIndex]);
     cardIndex = (cardIndex + 1) % 4;
 
     animation->setCard(card);
 }
+
 
 
 void World::update(float delta) {
