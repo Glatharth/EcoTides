@@ -8,7 +8,7 @@ class World {
 public:
     World();
     ~World();
-
+    void cardSwap();
     void update(float delta);
     void draw();
 

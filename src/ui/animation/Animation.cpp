@@ -7,31 +7,74 @@ Animation::Animation(Card* card) : card(card) {}
 Animation::~Animation() {}
 
 void Animation::update(float delta) {
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-        float mouseX = GetMousePosition().x;
-        if (!dragging) {
-            lastMouseX = mouseX;
-            dragging = true;
-        }
-        float deltaX = mouseX - lastMouseX;
-        dragOffsetX += deltaX;
+    switch (state) {
+        case Idle:
+            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+                float mouseX = GetMousePosition().x;
+                lastMouseX = mouseX;
+                dragging = true;
+                state = Dragging;
+            }
+            break;
 
-        float maxDrag = 150.0f;
-        if (dragOffsetX > maxDrag) dragOffsetX = maxDrag;
-        else if (dragOffsetX < -maxDrag) dragOffsetX = -maxDrag;
+        case Dragging:
+            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+                float mouseX = GetMousePosition().x;
+                float deltaX = mouseX - lastMouseX;
+                dragOffsetX += deltaX;
+                float maxDrag = 250.0f;
+                if (dragOffsetX > maxDrag) dragOffsetX = maxDrag;
+                else if (dragOffsetX < -maxDrag) dragOffsetX = -maxDrag;
+                lastMouseX = mouseX;
+            } else {
+                dragging = false;
+                constexpr float discardThreshold = 200.0f;
+                if (fabs(dragOffsetX) > discardThreshold) {
+                    state = Discarding;
+                } else if (fabs(dragOffsetX) > 1.0f) {
+                    state = Returning;
+                } else {
+                    dragOffsetX = 0.0f;
+                    state = Idle;
+                }
+            }
+            break;
 
-        lastMouseX = mouseX;
-    } else {
-        dragging = false;
-        if (dragOffsetX > 0) {
-            dragOffsetX -= 300.0f * delta;
-            if (dragOffsetX < 0) dragOffsetX = 0;
-        } else if (dragOffsetX < 0) {
-            dragOffsetX += 300.0f * delta;
-            if (dragOffsetX > 0) dragOffsetX = 0;
+        case Discarding:
+            dragOffsetX += (dragOffsetX > 0 ? 1 : -1) * discardSpeed * delta;
+            if (fabs(dragOffsetX) > Card::GetScreenSize().x + Card::GetSquareSize()) {
+                cardSwapFlag = true;
+                state = Entering;
+                dragOffsetX = -(dragOffsetX > 0 ? 1 : -1) * (Card::GetScreenSize().x + Card::GetSquareSize());
+            }
+            break;
+
+        case Entering:{
+            float dir = (dragOffsetX > 0) ? -1 : 1;
+            dragOffsetX += enterSpeed * delta * dir;
+            if ((dir == -1 && dragOffsetX >= 0) || (dir == 1 && dragOffsetX <= 0)) {
+                dragOffsetX = 0.0f;
+                state = Idle;
+            }
+            break;
         }
+        case Returning: {
+        float returnSpeed = 600.0f;
+        
+        float direction = (dragOffsetX > 0) ? -1.0f : 1.0f;
+
+        dragOffsetX += direction * returnSpeed * delta;
+
+        if ((direction < 0 && dragOffsetX < 0) || (direction > 0 && dragOffsetX > 0) || fabs(dragOffsetX) < 1.0f) {
+            dragOffsetX = 0.0f;
+            state = Idle;
+        }
+        break;
+        }
+
     }
 }
+
 void Animation::draw() {
     float normDrag = dragOffsetX / 150.0f;
     float rotation = maxRotation * normDrag;
@@ -53,5 +96,16 @@ void Animation::draw() {
     };
 
     DrawTexturePro(card->texture, sourceRec, destRec, origin, rotation, WHITE);
+}
+void Animation::setCard(Card* newCard) {
+    card = newCard;
+}
+
+bool Animation::needsCardSwap() const {
+    return cardSwapFlag;
+}
+
+void Animation::resetSwap() {
+    cardSwapFlag = false;
 }
 
