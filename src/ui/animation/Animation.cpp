@@ -76,7 +76,7 @@ void Animation::update(float delta) {
 }
 
 void Animation::draw() {
-    float normDrag = dragOffsetX / 150.0f;
+    float normDrag = dragOffsetX / 250.0f;
     float rotation = maxRotation * normDrag;
     raylib::Vector2 position = Card::GetPosition();
     position.x += dragOffsetX;
@@ -96,19 +96,27 @@ void Animation::draw() {
 
     DrawTexturePro(card->texture, sourceRec, destRec, origin, rotation, WHITE);
 
-    if (normDrag > 0.3f) {
-        Rectangle overlayRect = {destRec.x - 50, destRec.y - 420, 100, 50};
-        Color grayTransparent = {128, 128, 128, (unsigned char)(normDrag * 255)};
-        DrawRectangleRec(overlayRect, grayTransparent);
+    if (normDrag > 0.5f) {
+        float alphaFactor = (normDrag - 0.5f) * 1.4f;
+        if (alphaFactor > 1.0f) alphaFactor = 1.0f;
 
-        DrawText("SIM", (int)overlayRect.x + 10, (int)overlayRect.y + 10, 40, ColorAlpha(GREEN, normDrag));
-    } else if (normDrag < -0.3f) {
-        Rectangle overlayRect = {destRec.x - 50, destRec.y - 420, 100, 50};
-        Color grayTransparent = {128, 128, 128, (unsigned char)(-normDrag * 255)};
-        DrawRectangleRec(overlayRect, grayTransparent);
+        Rectangle overlayRect = { destRec.x - 45, destRec.y - 420, 100, 50 };
+        Color blackTransparent = { 0, 0, 0, (unsigned char)(alphaFactor * 255) };
+        DrawRectangleRec(overlayRect, blackTransparent);
 
-        DrawText("NÃO", (int)overlayRect.x + 10, (int)overlayRect.y + 10, 40, ColorAlpha(RED, -normDrag));
+        DrawText("SIM", (int)(overlayRect.x + 10), (int)(overlayRect.y + 10), 40, ColorAlpha(GREEN, alphaFactor));
     }
+    else if (normDrag < -0.5f) {
+        float alphaFactor = (-normDrag - 0.5f) * 1.4f;
+        if (alphaFactor > 1.0f) alphaFactor = 1.0f;
+
+        Rectangle overlayRect = { destRec.x - 45, destRec.y - 420, 100, 50 };
+        Color blackTransparent = { 0, 0, 0, (unsigned char)(alphaFactor * 255) };
+        DrawRectangleRec(overlayRect, blackTransparent);
+
+        DrawText("NÃO", (int)(overlayRect.x + 10), (int)(overlayRect.y + 10), 40, ColorAlpha(RED, alphaFactor));
+    }
+
 }
 
 void Animation::setCard(Card* newCard) {
