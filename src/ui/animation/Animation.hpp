@@ -1,6 +1,6 @@
 #pragma once
 
-class Card;
+class CardManager;
 class Animation {
 //estados possíveis da animação
 enum AnimationState {
@@ -11,17 +11,17 @@ enum AnimationState {
     Returning
 };
 public:
-    explicit Animation(Card* card);
+    explicit Animation(CardManager* card);
     ~Animation();
 
-    void setCard(Card* newCard);
+    void setCard(CardManager* newCard);
     bool needsCardSwap() const;
     void resetSwap();
     void update(float delta);
     void draw();
 
 private:
-    Card* card;
+    CardManager* card;
     float dragOffsetX = 0.0f;
     float maxRotation = 5.0f;
     bool dragging = false;

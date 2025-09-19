@@ -16,7 +16,7 @@ World::World() : dummy(0) {
         cardIds[randIndex] = temp;
     }
 
-    card = new Card(cardIds[0]);
+    card = new CardManager(cardIds[0]);
     animation = new Animation(card);
     cardIndex = 1;
 }
@@ -33,7 +33,7 @@ World::~World() {
 void World::cardSwap() {
     delete card;
 
-    card = new Card(cardIds[cardIndex]);  // cardIds e cardIndex são membros da classe
+    card = new CardManager(cardIds[cardIndex]);  // cardIds e cardIndex são membros da classe
     cardIndex = (cardIndex + 1) % 4;
 
     animation->setCard(card);

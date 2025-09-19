@@ -1,8 +1,8 @@
-#include "Card.hpp"
+#include "CardManager.hpp"
 #include <iostream>
 #include "io/FileLoader.hpp"
 
-Card::Card(int cardId) : id(cardId) {
+CardManager::CardManager(int cardId) : id(cardId) {
    InitializeStatic();
 
    FileLoader fileLoader;
@@ -32,7 +32,7 @@ Card::Card(int cardId) : id(cardId) {
    }
 }
 
-Card::~Card() {
+CardManager::~CardManager() {
    if (texture.id > 0) {
       texture.Unload();
    }
@@ -42,7 +42,7 @@ Card::~Card() {
    }
 }
 
-bool Card::LoadImage() {
+bool CardManager::LoadImage() {
    try {
       image = new raylib::Image(path);
       image->ResizeNN(squareSize, squareSize);
@@ -54,7 +54,7 @@ bool Card::LoadImage() {
    }
 }
 
-void Card::Draw(const raylib::Color& color) const {
+void CardManager::Draw(const raylib::Color& color) const {
    if (loaded) {
       texture.Draw(position, color);
    }

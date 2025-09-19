@@ -1,8 +1,8 @@
 #include "Animation.hpp"
-#include "ui/card/Card.hpp"
+#include "ui/card/CardManager.hpp"
 #include <raylib.h>
 
-Animation::Animation(Card* card) : card(card) {}
+Animation::Animation(CardManager* card) : card(card) {}
 
 Animation::~Animation() {}
 
@@ -42,10 +42,10 @@ void Animation::update(float delta) {
 
         case Discarding:
             dragOffsetX += (dragOffsetX > 0 ? 1 : -1) * discardSpeed * delta;
-            if (fabs(dragOffsetX) > Card::GetScreenSize().x + Card::GetSquareSize()) {
+            if (fabs(dragOffsetX) > CardManager::GetScreenSize().x + CardManager::GetSquareSize()) {
                 cardSwapFlag = true;
                 state = Entering;
-                dragOffsetX = -(dragOffsetX > 0 ? 1 : -1) * (Card::GetScreenSize().x + Card::GetSquareSize());
+                dragOffsetX = -(dragOffsetX > 0 ? 1 : -1) * (CardManager::GetScreenSize().x + CardManager::GetSquareSize());
             }
             break;
 
@@ -78,7 +78,7 @@ void Animation::update(float delta) {
 void Animation::draw() {
     float normDrag = dragOffsetX / 250.0f;
     float rotation = maxRotation * normDrag;
-    raylib::Vector2 position = Card::GetPosition();
+    raylib::Vector2 position = CardManager::GetPosition();
     position.x += dragOffsetX;
 
     Rectangle sourceRec = { 0, 0, (float)card->texture.width, (float)card->texture.height };
@@ -119,7 +119,7 @@ void Animation::draw() {
 
 }
 
-void Animation::setCard(Card* newCard) {
+void Animation::setCard(CardManager* newCard) {
     card = newCard;
 }
 

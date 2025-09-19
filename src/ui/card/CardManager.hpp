@@ -8,11 +8,11 @@
 
 #include "utils/enum.hpp"
 
-class Card {
+class CardManager {
 public:
-    explicit Card(int cardId);
+    explicit CardManager(int cardId);
 
-    ~Card();
+    ~CardManager();
 
     void Draw(const raylib::Color& color = WHITE) const;
 
