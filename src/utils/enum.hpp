@@ -6,3 +6,11 @@ enum class EventType {
     MODIFY,
     DELETE,
 };
+
+enum class ScreenState {
+    MENU,
+    GAME,
+    OPTIONS,
+    VICTORY,
+    DEFEAT
+};

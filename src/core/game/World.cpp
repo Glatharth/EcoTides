@@ -1,7 +1,11 @@
 #include "World.hpp"
 #include <raylib-cpp.hpp>
 
+
 World::World() : dummy(0) {
+    screen = new Screens();
+    
+
     cardIds[0] = 1;
     cardIds[1] = 2;
     cardIds[2] = 3;
@@ -24,6 +28,8 @@ World::World() : dummy(0) {
 World::~World() {
     delete animation;
     delete card;
+
+    delete screen;
 }
 
 /**
@@ -47,6 +53,7 @@ void World::update(float delta) {
         cardSwap();
         animation->resetSwap();
     }
+    screen->update(delta);
 }
 
 
@@ -55,7 +62,8 @@ void World::update(float delta) {
  */
 void World::draw() {
     BeginDrawing();
-    ClearBackground(WHITE);
+    ClearBackground(RAYWHITE);
+    screen->render();
     animation->draw();
     DrawFPS(20, 20);
     EndDrawing();

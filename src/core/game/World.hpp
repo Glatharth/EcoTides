@@ -4,6 +4,14 @@
 #include "ui/card/Card.hpp"
 #include "ui/animation/Animation.hpp"
 
+#pragma once
+
+#include <raylib-cpp.hpp>
+#include "utils/enum.hpp"
+#include "ui/screen/Screen.hpp"
+
+
+
 class World {
 public:
     World();
@@ -18,6 +26,7 @@ private:
     int dummy;
     int cardIndex = 0;
     int cardIds[4];
+    Screens* screen;
 };
 
 #endif // ECOTIDES_WORLD_HPP
