@@ -1,21 +1,14 @@
 #include "World.hpp"
 #include <raylib-cpp.hpp>
 
+World::World() : dummy(0) {}
 
-World::World() : dummy(0) {
-    screen = new Screens();
-    
-}
-
-World::~World() {
-    delete screen;
-}
+World::~World() {}
 
 /**
  * @brief Reads user input and updates the state of the game.
  */
 void World::update(float delta) {
-    screen->update(delta);
 }
 
 
@@ -24,11 +17,14 @@ void World::update(float delta) {
  */
 void World::draw() {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(WHITE);
 
-    // Desenha a tela atual
-    screen->render();
-
-    DrawFPS(20, 20); // FPS no canto
+    const char *text = "Frase de efeito foda";
+    Vector2 m = MeasureTextEx(GetFontDefault(), text, 40, 4);
+    int x = GetScreenWidth() / 2 - m.x / 2;
+    int y = GetScreenHeight() / 2 - m.y / 2;
+    DrawRectangle(x, y, m.x, m.y, BLACK);
+    DrawText(text, x, y, 40, WHITE);
+    DrawFPS(20, 20);
     EndDrawing();
 }
