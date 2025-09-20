@@ -1,0 +1,28 @@
+#pragma once
+#include <string>
+#include <pugixml.hpp>
+
+#include "utils/enum.hpp"
+
+class FileLoader {
+public:
+    FileLoader();
+    explicit FileLoader(const std::string& xmlFilePath);
+    ~FileLoader();
+
+    bool IsLoaded() const;
+    std::string GetCardPath(int cardId) const;
+    EventType GetCardEventType(int cardId) const;
+    bool CardExists(int cardId) const;
+    static bool PathExists(const std::string& path);
+    void LoadAllCards() const;
+private:
+    pugi::xml_document doc;
+    pugi::xml_parse_result result;
+    bool loaded;
+    std::string xmlFilePath;
+
+    pugi::xml_node FindCardNode(int cardId) const;
+
+    bool LoadXML(const std::string& filePath);
+};

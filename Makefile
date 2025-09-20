@@ -16,8 +16,8 @@ target := $(buildDir)/$(executable)
 sources := $(call rwildcard,src/,*.cpp)
 objects := $(patsubst src/%, $(buildDir)/%, $(patsubst %.cpp, %.o, $(sources)))
 depends := $(patsubst %.o, %.d, $(objects))
-compileFlags := -std=c++17 -I include -I src
-linkFlags = -L lib/$(platform) -l raylib
+compileFlags := -std=c++17 -I include -I src -I vendor/pugixml/src
+linkFlags = -L lib/$(platform) -l raylib -lpugixml
 
 # Check for Windows
 ifeq ($(OS), Windows_NT)
@@ -73,12 +73,16 @@ include: submodules
 	$(call COPY,vendor/raylib/src,./include,raylib.h)
 	$(call COPY,vendor/raylib/src,./include,raymath.h)
 	$(call COPY,vendor/raylib-cpp/include,./include,*.hpp)
+	$(call COPY,vendor/pugixml/src,./include,*.hpp)
 
 # Build the raylib static library file and copy it into lib
 lib: submodules
 	cd vendor/raylib/src $(THEN) "$(MAKE)" PLATFORM=PLATFORM_DESKTOP
 	$(MKDIR) $(call platformpth, lib/$(platform))
 	$(call COPY,vendor/raylib/src,lib/$(platform),libraylib.a)
+	$(CXX) -std=c++17 -c vendor/pugixml/src/pugixml.cpp -o vendor/pugixml/src/pugixml.o
+	ar rcs vendor/pugixml/libpugixml.a vendor/pugixml/src/pugixml.o
+	$(call COPY,vendor/pugixml,lib/$(platform),libpugixml.a)
 
 # Link the program and create the executable
 $(target): $(objects)

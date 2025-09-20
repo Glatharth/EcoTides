@@ -4,30 +4,30 @@
 #include <raylib.h>
 #include "utils/enum.hpp"
 
-// Classe responsável por gerenciar todas as telas do jogo.
+typedef void (*StartGameCallback)();
+
 class Screens {
 public:
     Screens();
-    ~Screens() = default;
 
-    // Atualiza a lógica da tela atual (inputs, cliques, etc.)
     void update(float delta);
-
-    // Renderiza a tela atual (textos, botões, cores de fundo).
     void render();
-
-    // Troca de estado/tela
     void change(ScreenState next);
+    ScreenState getCurrentScreen() const { return current; }
+    void setStartGameCallback(StartGameCallback callback);
 
 private:
-    ScreenState current;  // Tela atual
+    ScreenState current;
 
-    // Helpers de desenho
+    StartGameCallback startGameCallback = nullptr;
+
+    bool playerWon = false;
+    bool playerLost = false;
+
     void drawCenteredText(const char* text, int y, int fontSize, Color color);
     bool drawButton(Rectangle rect, const char* label, Color normal, Color hover, int fontSize = 20);
-
-    // Helpers de layout
     Rectangle makeButton(int centerX, int startY, int index, int btnWidth, int btnHeight, int spacing);
+
     void drawMenuScreen();
     void drawGameScreen();
     void drawOptionsScreen();
@@ -35,7 +35,4 @@ private:
     void drawDefeatScreen();
 };
 
-#endif // SCREENS_HPP
-
-
-
+#endif
