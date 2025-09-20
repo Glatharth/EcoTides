@@ -1,7 +1,7 @@
 #ifndef SCREENS_HPP
 #define SCREENS_HPP
 
-#include <raylib.h>
+#include <raylib-cpp.hpp>
 #include "utils/enum.hpp"
 
 // Classe responsável por gerenciar todas as telas do jogo.
@@ -10,14 +10,12 @@ public:
     Screens();
     ~Screens() = default;
 
-    // Atualiza a lógica da tela atual (inputs, cliques, etc.)
     void update(float delta);
-
-    // Renderiza a tela atual (textos, botões, cores de fundo).
     void render();
-
-    // Troca de estado/tela
     void change(ScreenState next);
+
+        // Função nova para obter a tela atual
+    ScreenState getCurrent() const { return current; }
 
 private:
     ScreenState current;  // Tela atual
@@ -28,6 +26,8 @@ private:
 
     // Helpers de layout
     Rectangle makeButton(int centerX, int startY, int index, int btnWidth, int btnHeight, int spacing);
+
+    // Telas
     void drawMenuScreen();
     void drawGameScreen();
     void drawOptionsScreen();
@@ -36,3 +36,4 @@ private:
 };
 
 #endif // SCREENS_HPP
+

@@ -61,6 +61,18 @@ void Screens::drawGameScreen() {
     if (drawButton(makeButton(centerX, startY, 0, 200, 50, 20), "VICTORY", LIGHTGRAY, GREEN)) change(ScreenState::VICTORY);
     if (drawButton(makeButton(centerX, startY, 1, 200, 50, 20), "DEFEAT", LIGHTGRAY, RED)) change(ScreenState::DEFEAT);
     if (drawButton(makeButton(centerX, startY, 2, 200, 50, 20), "BACK", LIGHTGRAY, SKYBLUE)) change(ScreenState::MENU);
+
+    /* remova os botoes de vitoria e derrota e para fazer que mude a tela de acordo com o jogo, pode-se fazer 
+    if(trash >= 100){
+         change(ScreenState::DEFEAT);
+    }
+        ou
+        
+    if( cards == 0 ) {
+        change(ScreenState::VICTORY);
+       }  */
+
+
 }
 
 void Screens::drawOptionsScreen() {
@@ -72,6 +84,8 @@ void Screens::drawOptionsScreen() {
     int startY = GetScreenHeight() / 2;
 
     if (drawButton(makeButton(centerX, startY, 0, 200, 50, 20), "BACK", RAYWHITE, SKYBLUE)) change(ScreenState::MENU);
+
+    /* no projeto nao fala que ia ter options se quiser tirar, pode ser ate melhor pra dar menos trabalho */
 }
 
 void Screens::drawVictoryScreen() {
@@ -98,10 +112,8 @@ void Screens::drawDefeatScreen() {
 
 // ---------------- UPDATE ----------------
 void Screens::update(float delta) {
-    // Por enquanto a lógica de input está embutida nos botões da renderização.
-    // Se quiser lógica separada, moveria parte disso pra cá.
-    (void)delta; // evitar warning
-}
+    (void)delta;
+;}
 
 // ---------------- RENDER ----------------
 void Screens::render() {
