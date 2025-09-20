@@ -4,6 +4,3 @@
 [submodule "vendor/raylib"]
 	path = vendor/raylib
 	url = https://github.com/raysan5/raylib
-[submodule "vendor/pugixml"]
-	path = vendor/pugixml
-	url = https://github.com/zeux/pugixml.git
