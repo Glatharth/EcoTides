@@ -1,39 +1,36 @@
-#ifndef SCREENS_HPP
-#define SCREENS_HPP
-
-#include <raylib-cpp.hpp>
+#pragma once
 #include "utils/enum.hpp"
+#include <raylib-cpp.hpp>
 
-// Classe responsável por gerenciar todas as telas do jogo.
 class Screens {
+private:
+    ScreenState current;
+    bool showConfirmPopup; // controla popup do botão de sair
+
+    // Botões do popup
+    Rectangle btnContinue;
+    Rectangle btnMenu;
+
 public:
     Screens();
-    ~Screens() = default;
+
+    void change(ScreenState next);
+    ScreenState getCurrent() const;
 
     void update(float delta);
     void render();
-    void change(ScreenState next);
 
-        // Função nova para obter a tela atual
-    ScreenState getCurrent() const { return current; }
+    bool isPopupActive() const { return showConfirmPopup; }
 
-private:
-    ScreenState current;  // Tela atual
-
-    // Helpers de desenho
+    // helpers
     void drawCenteredText(const char* text, int y, int fontSize, Color color);
     bool drawButton(Rectangle rect, const char* label, Color normal, Color hover, int fontSize = 20);
-
-    // Helpers de layout
     Rectangle makeButton(int centerX, int startY, int index, int btnWidth, int btnHeight, int spacing);
 
-    // Telas
+    // telas específicas
     void drawMenuScreen();
     void drawGameScreen();
     void drawOptionsScreen();
     void drawVictoryScreen();
     void drawDefeatScreen();
 };
-
-#endif // SCREENS_HPP
-

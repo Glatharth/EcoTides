@@ -1,14 +1,9 @@
-// World.hpp
-#ifndef ECOTIDES_WORLD_HPP
-#define ECOTIDES_WORLD_HPP
-
-#pragma once
+#ifndef WORLD_HPP
+#define WORLD_HPP
 
 #include <raylib-cpp.hpp>
-#include "utils/enum.hpp"
-#include "ui/screen/Screen.hpp"
-
-
+#include "ui/Screens/Screens.hpp"
+#include "ui/Powers/Powers.hpp"
 
 class World {
 public:
@@ -18,9 +13,17 @@ public:
     void update(float delta);
     void draw();
 
+    ScreenState getCurrent() const;
+
+    void retry();
+
 private:
-    int dummy;
     Screens* screen;
+    Powers* powers;
+    int dummy;
+
+    void drawPowers(); // desenha as barras de poderes
 };
 
-#endif // ECOTIDES_WORLD_HPP
+#endif // WORLD_HPP
+
