@@ -22,7 +22,7 @@ static std::map<EventType, float> eventTypeWeights = {
     {EventType::UNKNOWN, 0.0f}
 };
 
-inline void generateSeed(std::string* seed, GameDifficulty difficulty) {
+inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) {
     FileLoader loader;
     std::vector<std::pair<int, float>> cardPunishments;
 
@@ -119,25 +119,16 @@ inline void generateSeed(std::string* seed, GameDifficulty difficulty) {
 
     // Fallback if result size is less than total
     if (result.size() < total) result = orderedIds;
-
-    std::ostringstream oss;
     for (int id : result) {
-        oss << std::setw(2) << std::setfill('0') << std::hex << id;
+        seed->push_back(static_cast<uint8_t>(id));
     }
-    *seed = oss.str();
 }
 
-inline std::string getSeedCardIdsAsString(const std::string& seed, size_t idWidth = 2) {
-    std::vector<std::string> ids;
-    for (size_t i = 0; i + idWidth <= seed.size(); i += idWidth) {
-        std::string hexId = seed.substr(i, idWidth);
-        int id = std::stoi(hexId, nullptr, 16);
-        ids.push_back(std::to_string(id));
-    }
+inline std::string getSeedCardIdsAsString(const std::vector<uint8_t>& seed) {
     std::ostringstream oss;
-    for (size_t i = 0; i < ids.size(); ++i) {
-        oss << ids[i];
-        if (i + 1 < ids.size()) oss << ",";
+    for (size_t i = 0; i < seed.size(); ++i) {
+        oss << static_cast<int>(seed[i]);
+        if (i + 1 < seed.size()) oss << " ,";
     }
     return oss.str();
 }
