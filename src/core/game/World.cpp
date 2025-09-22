@@ -1,5 +1,7 @@
 #include "World.hpp"
 
+#include "utils/utils.hpp"
+
 
 World* globalWorldInstance = nullptr;
 
@@ -24,6 +26,9 @@ World::~World() {
 }
 
 void World::startGame() {
+    std::string seed;
+    generateSeed(&seed, GameDifficulty::HARD);
+    printf("Testttttttttttttttttttttttttttttttt: %s\n", getSeedCardIdsAsString(seed).c_str());
     cardIds[0] = 1;
     cardIds[1] = 2;
     cardIds[2] = 3;
