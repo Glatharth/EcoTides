@@ -32,7 +32,7 @@ public:
 
     static int getNextCard() {
         if (seed.empty()) return 1;
-        return seed[(currentIndex) % seed.size()]; // Próximo card
+        return seed[(currentIndex) % seed.size()]; // Next card
     }
 
 private:

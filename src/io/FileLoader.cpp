@@ -87,7 +87,11 @@ std::map<ResourceType, int> FileLoader::GetCardResources(const int cardId) const
 }
 
 int FileLoader::GetCardResourceType(const int cardId, const ResourceType resource) const {
-    return GetCardResources(cardId)[resource];
+    const auto resources = GetCardResources(cardId);
+    if (const auto it = resources.find(resource); it != resources.end()) {
+        return it->second;
+    }
+    return 0;
 }
 
 int FileLoader::GetCardQuantity(const int cardId) const {
