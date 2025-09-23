@@ -1,13 +1,13 @@
-// World.hpp
-#ifndef ECOTIDES_WORLD_HPP
-#define ECOTIDES_WORLD_HPP
-#include <raylib-cpp.hpp>
-#include "ui/card/Card.hpp"
-#include "ui/animation/Animation.hpp"
-#include "utils/enum.hpp"
-#include "ui/screen/Screen.hpp"
 
 #pragma once
+#include <array>
+#include <string>
+#include "ui/Screens/Screens.hpp"
+#include "ui/Powers/Powers.hpp"
+#include "ui/card/Card.hpp"
+#include "ui/animation/Animation.hpp"
+#include "io/FileLoader.hpp"
+#include "utils/enum.hpp"
 
 class World {
 public:
@@ -18,17 +18,26 @@ public:
     void update(float delta);
     void draw();
 
+    ScreenState getCurrent() const;
+    void retry();
+
 private:
     Screens* screen;
+    Powers* powers;
+
     Card* card;
     Animation* animation;
 
-    int cardIds[4];
+    std::array<std::string, 4> cardPaths;
     int cardIndex;
 
     bool playerWon;
     bool playerLost;
+
+    FileLoader loader;
+
     void cardSwap();
+    void drawPowers();
 };
 
-#endif
+extern World* globalWorldInstance;

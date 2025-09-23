@@ -1,16 +1,24 @@
 #pragma once
 
-enum class EventType {
-    UNKNOWN,
-    CREATE,
-    MODIFY,
-    DELETE,
-};
-
 enum class ScreenState {
     MENU,
     GAME,
-    OPTIONS,
     VICTORY,
-    DEFEAT
+    DEFEAT,
+    OPTIONS
+};
+
+enum class PowerType {
+    ECONOMY,
+    AWARENESS,
+    TRASH_COLLECTION,
+    TRASH_ACCUMULATION,
+    COUNT
+};
+
+enum class EventType {
+    CREATE,
+    MODIFY,
+    DELETE,
+    UNKNOWN // caso não seja nenhum
 };
