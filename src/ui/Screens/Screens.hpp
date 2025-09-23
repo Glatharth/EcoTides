@@ -10,15 +10,12 @@ private:
     bool showConfirmPopup;
     bool mouseDebounce;
    
-    // Botões do popup
     Rectangle btnPopupContinue;
     Rectangle btnPopupMenu;
 
-    // Botões da tela de vitória
     Rectangle btnVictoryMenu;
     Rectangle btnVictoryRetry;
 
-    // Botões da tela de derrota
     Rectangle btnDefeatMenu;
     Rectangle btnDefeatRetry;
 public:

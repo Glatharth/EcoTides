@@ -6,8 +6,8 @@
 
 class FileLoader {
 public:
-    FileLoader();                         // Construtor padrão (não carrega XML)
-    explicit FileLoader(const std::string& xmlFilePath); // Construtor com caminho
+    FileLoader();
+    explicit FileLoader(const std::string& xmlFilePath);
     ~FileLoader();
 
     bool IsLoaded() const;

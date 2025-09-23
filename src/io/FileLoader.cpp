@@ -2,20 +2,18 @@
 #include <iostream>
 #include <filesystem>
 
-// ------------------ Construtores ------------------
+
 FileLoader::FileLoader() {
-    loaded = false;  // não carrega XML automaticamente
+    loaded = false;  
     xmlFilePath = "";
 }
 
 FileLoader::FileLoader(const std::string& xmlFilePath) {
-    loaded = LoadXML(xmlFilePath); // carrega apenas uma vez
+    loaded = LoadXML(xmlFilePath); 
 }
 
-// ------------------ Destrutor ------------------
 FileLoader::~FileLoader() = default;
 
-// ------------------ Carregar XML ------------------
 bool FileLoader::LoadXML(const std::string& filePath) {
     xmlFilePath = filePath;
     result = doc.load_file(filePath.c_str());
@@ -29,12 +27,10 @@ bool FileLoader::LoadXML(const std::string& filePath) {
     return false;
 }
 
-// ------------------ Verifica carregamento ------------------
 bool FileLoader::IsLoaded() const {
     return loaded;
 }
 
-// ------------------ Buscar node da carta ------------------
 pugi::xml_node FileLoader::FindCardNode(int cardId) const {
     if (!loaded) return {};
 
@@ -44,10 +40,9 @@ pugi::xml_node FileLoader::FindCardNode(int cardId) const {
         }
     }
 
-    return {}; // node vazio se não achar
+    return {};
 }
 
-// ------------------ Pegar caminho da carta ------------------
 std::string FileLoader::GetCardPath(int cardId) const {
     if (pugi::xml_node card = FindCardNode(cardId)) {
         return card.attribute("path").as_string();
@@ -55,7 +50,6 @@ std::string FileLoader::GetCardPath(int cardId) const {
     return "";
 }
 
-// ------------------ Tipo de evento da carta ------------------
 EventType FileLoader::GetCardEventType(int cardId) const {
     if (pugi::xml_node card = FindCardNode(cardId)) {
         static const std::unordered_map<std::string, EventType> eventTypeMap = {
@@ -72,17 +66,14 @@ EventType FileLoader::GetCardEventType(int cardId) const {
     return EventType::UNKNOWN;
 }
 
-// ------------------ Verifica existência de carta ------------------
 bool FileLoader::CardExists(int cardId) const {
     return FindCardNode(cardId).type() != pugi::node_null;
 }
 
-// ------------------ Verifica existência do arquivo ------------------
 bool FileLoader::PathExists(const std::string& path) {
     return std::filesystem::exists(path);
 }
 
-// ------------------ Listar todas as cartas ------------------
 void FileLoader::LoadAllCards() const {
     if (!loaded) {
         std::cout << "XML não carregado corretamente" << std::endl;
