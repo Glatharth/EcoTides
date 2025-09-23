@@ -1,14 +1,13 @@
-#ifndef WORLD_HPP
-#define WORLD_HPP
 
-#include <raylib-cpp.hpp>
+#pragma once
+#include <array>
+#include <string>
 #include "ui/Screens/Screens.hpp"
 #include "ui/Powers/Powers.hpp"
 #include "ui/card/Card.hpp"
 #include "ui/animation/Animation.hpp"
+#include "io/FileLoader.hpp"
 #include "utils/enum.hpp"
-
-#pragma once
 
 class World {
 public:
@@ -20,27 +19,25 @@ public:
     void draw();
 
     ScreenState getCurrent() const;
-
     void retry();
 
 private:
     Screens* screen;
     Powers* powers;
-    int dummy;
-
-    void drawPowers(); // desenha as barras de poderes
-
-
-
 
     Card* card;
     Animation* animation;
 
-    int cardIds[4];
+    std::array<std::string, 4> cardPaths;
     int cardIndex;
 
     bool playerWon;
     bool playerLost;
+
+    FileLoader loader;
+
     void cardSwap();
+    void drawPowers();
 };
-#endif // WORLD_HPP
+
+extern World* globalWorldInstance;

@@ -1,27 +1,34 @@
+
 #include "Screens.hpp"
 #include <cstdlib>
-#include <raylib-cpp.hpp>
+#include "core/game/World.hpp"
+
+extern World* globalWorldInstance;
 
 // ---------------- CONSTRUTOR ----------------
-Screens::Screens() : current(ScreenState::MENU), showConfirmPopup(false) {
+Screens::Screens() : current(ScreenState::MENU), showConfirmPopup(false), mouseDebounce(false) {
     int w = 300, h = 150;
     int x = GetScreenWidth()/2 - w/2;
     int y = GetScreenHeight()/2 - h/2;
 
-    // definir botões relativos à caixa do popup
-    btnContinue = { (float)(x + 30), (float)(y + 90), 100, 40 };
-    btnMenu     = { (float)(x + w - 130), (float)(y + 90), 100, 40 };
+    // Popup
+    btnPopupContinue = { (float)(x + 30), (float)(y + 90), 100, 40 };
+    btnPopupMenu     = { (float)(x + w - 130), (float)(y + 90), 100, 40 };
+
+    // Vitória
+    btnVictoryMenu  = { (float)(x + 30), (float)(y + 200), 100, 40 };
+    btnVictoryRetry = { (float)(x + w - 130), (float)(y + 200), 100, 40 };
+
+    // Derrota
+    btnDefeatMenu  = { (float)(x + 30), (float)(y + 200), 100, 40 };
+    btnDefeatRetry = { (float)(x + w - 130), (float)(y + 200), 100, 40 };
 }
 
-void Screens::change(ScreenState next) {
-    current = next;
-}
+// ------------------ Mudança de tela ------------------
+void Screens::change(ScreenState next) { current = next; }
+ScreenState Screens::getCurrent() const { return current; }
 
-ScreenState Screens::getCurrent() const {
-    return current;
-}
-
-// ---------------- HELPERS ----------------
+// ------------------ Helpers ------------------
 void Screens::drawCenteredText(const char* text, int y, int fontSize, Color color) {
     int textWidth = MeasureText(text, fontSize);
     int x = (GetScreenWidth() - textWidth) / 2;
@@ -35,24 +42,23 @@ bool Screens::drawButton(Rectangle rect, const char* label, Color normal, Color 
     DrawRectangleRec(rect, isHover ? hover : normal);
 
     int textWidth = MeasureText(label, fontSize);
-    int textX = rect.x + (rect.width - textWidth) / 2;
-    int textY = rect.y + (rect.height - fontSize) / 2;
-
+    int textX = rect.x + (rect.width - textWidth)/2;
+    int textY = rect.y + (rect.height - fontSize)/2;
     DrawText(label, textX, textY, fontSize, BLACK);
 
     return isHover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
 }
 
 Rectangle Screens::makeButton(int centerX, int startY, int index, int btnWidth, int btnHeight, int spacing) {
-    return { (float)(centerX - btnWidth / 2), 
-             (float)(startY + index * (btnHeight + spacing)), 
-             (float)btnWidth, 
+    return { (float)(centerX - btnWidth / 2),
+             (float)(startY + index * (btnHeight + spacing)),
+             (float)btnWidth,
              (float)btnHeight };
 }
 
-// ---------------- TELAS ----------------
+// ------------------ Telas ------------------
 void Screens::drawMenuScreen() {
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLUE);
     drawCenteredText("EcoTides", 80, 50, DARKBLUE);
 
     int centerX = GetScreenWidth() / 2;
@@ -60,22 +66,19 @@ void Screens::drawMenuScreen() {
 
     if (drawButton(makeButton(centerX, startY, 0, 200, 50, 20), "START GAME", LIGHTGRAY, SKYBLUE))
         change(ScreenState::GAME);
-
     if (drawButton(makeButton(centerX, startY, 1, 200, 50, 20), "OPTIONS", LIGHTGRAY, SKYBLUE))
         change(ScreenState::OPTIONS);
-
     if (drawButton(makeButton(centerX, startY, 2, 200, 50, 20), "EXIT", LIGHTGRAY, SKYBLUE))
         exit(0);
 }
 
 void Screens::drawGameScreen() {
-    ClearBackground(RAYWHITE);
-    // Nenhum botão aqui! Apenas o jogo e o popup se ativado
+    ClearBackground(BLUE);
 }
 
 void Screens::drawOptionsScreen() {
     ClearBackground(LIGHTGRAY);
-    drawCenteredText("OPTIONS MENU", 120, 40, DARKPURPLE);
+    drawCenteredText("OPTIONS MENU", 120, 40, BLACK);
 
     int centerX = GetScreenWidth() / 2;
     int startY = GetScreenHeight() / 2;
@@ -88,51 +91,65 @@ void Screens::drawVictoryScreen() {
     ClearBackground(GREEN);
     drawCenteredText("YOU WIN!", 200, 40, WHITE);
 
-    int centerX = GetScreenWidth() / 2;
-    int startY = 300;
-
-    if (drawButton(makeButton(centerX, startY, 0, 200, 50, 20), "MENU", LIGHTGRAY, SKYBLUE))
+    if (drawButton(btnVictoryMenu, "MENU", LIGHTGRAY, SKYBLUE))
         change(ScreenState::MENU);
 
-    if (drawButton(makeButton(centerX, startY, 1, 200, 50, 20), "RETRY", LIGHTGRAY, SKYBLUE))
-        change(ScreenState::GAME);
+    if (drawButton(btnVictoryRetry, "RETRY", LIGHTGRAY, SKYBLUE))
+        if (globalWorldInstance) globalWorldInstance->retry();
 }
 
 void Screens::drawDefeatScreen() {
     ClearBackground(RED);
     drawCenteredText("YOU LOSE!", 200, 40, WHITE);
 
-    int centerX = GetScreenWidth() / 2;
-    int startY = 300;
-
-    if (drawButton(makeButton(centerX, startY, 0, 200, 50, 20), "MENU", LIGHTGRAY, SKYBLUE))
+    if (drawButton(btnDefeatMenu, "MENU", LIGHTGRAY, SKYBLUE))
         change(ScreenState::MENU);
 
-    if (drawButton(makeButton(centerX, startY, 1, 200, 50, 20), "RETRY", LIGHTGRAY, SKYBLUE))
-        change(ScreenState::GAME);
+    if (drawButton(btnDefeatRetry, "RETRY", LIGHTGRAY, SKYBLUE))
+        if (globalWorldInstance) globalWorldInstance->retry();
 }
 
-// ---------------- UPDATE ----------------
+// ------------------ Update ------------------
 void Screens::update(float delta) {
+    // Se estamos em debounce, aguardamos o release do botão esquerdo antes de continuar
+    if (mouseDebounce) {
+        if (!IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+            mouseDebounce = false; // mouse liberado -> volta a processar entradas
+        } else {
+            return; // ainda pressionado -> ignora atualização de UI (evita click-through)
+        }
+    }
+
     if (showConfirmPopup) {
         Vector2 mouse = GetMousePosition();
+if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    // Botão Continuar → chama retry do World
+    if (CheckCollisionPointRec(mouse, btnPopupContinue)) {
+        showConfirmPopup = false;
+        if (globalWorldInstance)
+            globalWorldInstance->retry();
 
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (CheckCollisionPointRec(mouse, btnContinue)) showConfirmPopup = false;
-            if (CheckCollisionPointRec(mouse, btnMenu)) {
+        mouseDebounce = true; // bloqueia novos cliques até o release
+    }
+
+
+            // Botão Menu → volta para o menu
+            if (CheckCollisionPointRec(mouse, btnPopupMenu)) {
                 showConfirmPopup = false;
                 change(ScreenState::MENU);
+
+                mouseDebounce = true; // bloqueia novos cliques até o release
             }
         }
         return;
     }
 
-    // tecla ESC ativa popup apenas na tela de jogo
+    // Pressionar ENTER abre popup na tela de GAME
     if (current == ScreenState::GAME && IsKeyPressed(KEY_ENTER))
         showConfirmPopup = true;
 }
 
-// ---------------- RENDER ----------------
+// ------------------ Render ------------------
 void Screens::render() {
     switch (current) {
         case ScreenState::MENU: drawMenuScreen(); break;
@@ -142,7 +159,6 @@ void Screens::render() {
         case ScreenState::OPTIONS: drawOptionsScreen(); break;
     }
 
-    // Desenha popup se ativo
     if (showConfirmPopup) {
         int w = 300, h = 150;
         int x = GetScreenWidth()/2 - w/2;
@@ -151,17 +167,18 @@ void Screens::render() {
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5f));
         DrawRectangle(x, y, w, h, RAYWHITE);
         DrawRectangleLines(x, y, w, h, DARKGRAY);
+
         drawCenteredText("Deseja sair do jogo?", y + 30, 20, BLACK);
 
-        Color c1 = CheckCollisionPointRec(GetMousePosition(), btnContinue) ? LIGHTGRAY : GRAY;
-        Color c2 = CheckCollisionPointRec(GetMousePosition(), btnMenu) ? LIGHTGRAY : GRAY;
+        Color c1 = CheckCollisionPointRec(GetMousePosition(), btnPopupContinue) ? LIGHTGRAY : GRAY;
+        Color c2 = CheckCollisionPointRec(GetMousePosition(), btnPopupMenu) ? LIGHTGRAY : GRAY;
 
-        DrawRectangleRec(btnContinue, c1);
-        DrawRectangleLinesEx(btnContinue, 2, DARKGRAY);
-        DrawText("Continuar", btnContinue.x + 10, btnContinue.y + 10, 18, BLACK);
+        DrawRectangleRec(btnPopupContinue, c1);
+        DrawRectangleLinesEx(btnPopupContinue, 2, DARKGRAY);
+        DrawText("Continuar", btnPopupContinue.x + 10, btnPopupContinue.y + 10, 18, BLACK);
 
-        DrawRectangleRec(btnMenu, c2);
-        DrawRectangleLinesEx(btnMenu, 2, DARKGRAY);
-        DrawText("Menu", btnMenu.x + 25, btnMenu.y + 10, 18, BLACK);
+        DrawRectangleRec(btnPopupMenu, c2);
+        DrawRectangleLinesEx(btnPopupMenu, 2, DARKGRAY);
+        DrawText("Menu", btnPopupMenu.x + 25, btnPopupMenu.y + 10, 18, BLACK);
     }
 }

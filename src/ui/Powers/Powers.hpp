@@ -1,25 +1,20 @@
 #pragma once
-
-#include "utils/enum.hpp"   // onde estão os enums ScreenState e PowerType
-#include <array>
-
-// Estrutura que guarda o valor real e o valor animado de cada poder
-struct PowerData {
-    float value;       // valor real (0-100)
-    float animated;    // valor interpolado (suave)
-};
+#include <string>
+#include <raylib-cpp.hpp>
+#include "utils/enum.hpp" // Aqui deve ter o enum PowerType
 
 class Powers {
 public:
     Powers();
-
-    void update(float delta);                       // atualiza animação dos valores
-    void change(PowerType type, float amount);      // altera valor (+ ou -)
-    float get(PowerType type) const;                // valor real
-    float getAnimated(PowerType type) const;        // valor animado (suave)
-
     void reset();
+    void applyChange(PowerType type, int delta);
+    int getValue(PowerType type) const;
+    void update(float delta);
+    void drawIcons(int startX, int startY, int size, int spacing);
 
 private:
-    std::array<PowerData, (int)PowerType::COUNT> powers;
+    std::string iconPaths[4];    // Caminhos das imagens dos ícones
+    raylib::Texture icons[4];    // Texturas dos ícones (corrigido)
+    float value[4];              // Valor atual do poder
+    float targetValue[4];        // Valor alvo para animação
 };

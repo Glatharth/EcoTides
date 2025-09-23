@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <pugixml.hpp>
-
 #include "utils/enum.hpp"
 
 class FileLoader {

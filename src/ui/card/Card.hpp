@@ -1,72 +1,48 @@
 #pragma once
-#ifndef ECOTIDES_CARD_HPP
-#define ECOTIDES_CARD_HPP
-
 #include <raylib-cpp.hpp>
 #include <string>
-#include <memory>
-
-#include "utils/enum.hpp"
 
 class Card {
 public:
-    explicit Card(int cardId);
-
+    explicit Card(const std::string& imagePath);
     ~Card();
 
     void Draw(const raylib::Color& color = WHITE) const;
+    void SetFilter(TextureFilter filter) { texture.SetFilter(filter); }
+
+    const raylib::Texture& GetTexture() const { return texture; }
 
     static void UpdateScreenSize(const raylib::Vector2& newSize) {
         screenSize = newSize;
         UpdatePosition();
     }
 
-    void SetFilter(TextureFilter filter) {
-        texture.SetFilter(filter);
-    }
-
     static raylib::Vector2 GetScreenSize() { return screenSize; }
     static raylib::Vector2 GetPosition() { return position; }
     static int GetSquareSize() { return squareSize; }
 
-    int GetId() const { return id; }
     std::string GetPath() const { return path; }
-    EventType GetEventType() const { return eventType; }
     bool IsLoaded() const { return loaded; }
 
     friend class Animation;
 
 private:
-    static void InitializeStatic() {
-        if (!initialized) {
-            screenSize.x = static_cast<float>(GetScreenWidth());
-            screenSize.y = static_cast<float>(GetScreenHeight());
-            UpdatePosition();
-            initialized = true;
-        }
-    }
-
     static void UpdatePosition() {
-        position = raylib::Vector2(
+        position = raylib::Vector2{
             screenSize.x / 2.0f,
             (screenSize.y + squareSize) / 2.0f
-        );
+        };
     }
 
     bool LoadImage();
 
-    inline static raylib::Vector2 screenSize = {0, 0};
-    inline static raylib::Vector2 position = {0, 0};
+    inline static raylib::Vector2 screenSize = {0.0f, 0.0f};
+    inline static raylib::Vector2 position = {0.0f, 0.0f};
     static constexpr int squareSize = 7 * 64;
-    inline static bool initialized = false;
 
-    int id = -1;
     std::string path;
-    EventType eventType;
     bool loaded = false;
 
     raylib::Image* image = nullptr;
     raylib::Texture texture{};
 };
-
-#endif // ECOTIDES_CARD_HPP
