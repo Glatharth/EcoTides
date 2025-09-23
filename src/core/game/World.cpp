@@ -1,7 +1,10 @@
 #include "World.hpp"
+#include "utils/utils.hpp"
 
 
 World* globalWorldInstance = nullptr;
+std::vector<uint8_t> World::seed;
+size_t World::currentIndex = 0;
 
 void startGameWrapper() {
     if (globalWorldInstance) {
@@ -9,12 +12,13 @@ void startGameWrapper() {
     }
 }
 
-World::World() : card(nullptr), animation(nullptr), cardIndex(0), playerWon(false), playerLost(false) {
+World::World() : card(nullptr), animation(nullptr), playerWon(false), playerLost(false) {
     globalWorldInstance = this;
 
     screen = new Screens();
     screen->change(ScreenState::MENU);
     screen->setStartGameCallback(startGameWrapper);
+    generateSeed(&seed, GameDifficulty::HARD);
 }
 
 World::~World() {
@@ -24,14 +28,8 @@ World::~World() {
 }
 
 void World::startGame() {
-    cardIds[0] = 1;
-    cardIds[1] = 2;
-    cardIds[2] = 3;
-    cardIds[3] = 4;
-
-    card = new Card(cardIds[0]);
+    card = new Card(nextCard());
     animation = new Animation(card);
-    cardIndex = 1;
 
     playerWon = false;
     playerLost = false;
@@ -41,8 +39,7 @@ void World::startGame() {
 
 void World::cardSwap() {
     if (card) delete card;
-    card = new Card(cardIds[cardIndex]);
-    cardIndex = (cardIndex + 1) % 4;
+    card = new Card(nextCard());
     animation->setCard(card);
 }
 

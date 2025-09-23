@@ -7,10 +7,24 @@ enum class EventType {
     DELETE,
 };
 
+enum class ResourceType {
+    ECONOMY,
+    POPULATION_AWARENESS,
+    WASTE_COLLECTION,
+    WASTE_ACCUMULATION
+};
+
 enum class ScreenState {
     MENU,
     GAME,
     OPTIONS,
     VICTORY,
     DEFEAT
+};
+
+enum class GameDifficulty {
+    NORMAL,
+    HARD,
+    HARDCORE,
+    ZOIO,
 };

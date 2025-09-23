@@ -1,6 +1,5 @@
-// World.hpp
-#ifndef ECOTIDES_WORLD_HPP
-#define ECOTIDES_WORLD_HPP
+#pragma once
+#include <cstdint>
 #include <raylib-cpp.hpp>
 #include "ui/card/Card.hpp"
 #include "ui/animation/Animation.hpp"
@@ -17,18 +16,34 @@ public:
     void startGame(); 
     void update(float delta);
     void draw();
+    static int nextCard() {
+        if (seed.empty()) return 1;
+
+        if (currentIndex == seed.size()) {
+            return 0;
+        }
+
+        const uint8_t currentId = seed[currentIndex];
+
+        currentIndex = currentIndex + 1;
+
+        return currentId;
+    }
+
+    static int getNextCard() {
+        if (seed.empty()) return 1;
+        return seed[(currentIndex) % seed.size()]; // Next card
+    }
 
 private:
     Screens* screen;
     Card* card;
     Animation* animation;
 
-    int cardIds[4];
-    int cardIndex;
-
     bool playerWon;
     bool playerLost;
     void cardSwap();
-};
 
-#endif
+    static std::vector<uint8_t> seed;
+    static size_t currentIndex;
+};

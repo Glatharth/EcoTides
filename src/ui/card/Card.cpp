@@ -2,10 +2,10 @@
 #include <iostream>
 #include "io/FileLoader.hpp"
 
-Card::Card(int cardId) : id(cardId) {
+Card::Card(const int cardId) : id(cardId) {
    InitializeStatic();
 
-   FileLoader fileLoader;
+   const FileLoader fileLoader;
 
    if (!fileLoader.IsLoaded()) {
       std::cerr << "Error: Could not load XML file" << std::endl;
@@ -19,6 +19,7 @@ Card::Card(int cardId) : id(cardId) {
 
    path = fileLoader.GetCardPath(cardId);
    eventType = fileLoader.GetCardEventType(cardId);
+   resources = fileLoader.GetCardResources(cardId);
 
    if (!FileLoader::PathExists(path)) {
       std::cerr << "Error: Path does not exist: " << path << std::endl;

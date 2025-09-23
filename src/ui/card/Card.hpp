@@ -2,6 +2,7 @@
 #ifndef ECOTIDES_CARD_HPP
 #define ECOTIDES_CARD_HPP
 
+#include <map>
 #include <raylib-cpp.hpp>
 #include <string>
 #include <memory>
@@ -32,6 +33,12 @@ public:
     int GetId() const { return id; }
     std::string GetPath() const { return path; }
     EventType GetEventType() const { return eventType; }
+    const std::map<ResourceType, int>& GetResources() const { return resources; }
+    int GetResource(const ResourceType type) const {
+        const auto it = resources.find(type);
+        return (it != resources.end()) ? it->second : 0;
+    }
+
     bool IsLoaded() const { return loaded; }
 
     friend class Animation;
@@ -63,6 +70,7 @@ private:
     int id = -1;
     std::string path;
     EventType eventType;
+    std::map<ResourceType, int> resources;
     bool loaded = false;
 
     raylib::Image* image = nullptr;
