@@ -9,7 +9,7 @@ enum class ScreenState {
 };
 
 enum class PowerType {
-    ECONOMY,
+    ECONOMY = 0,
     AWARENESS,
     TRASH_COLLECTION,
     TRASH_ACCUMULATION,
@@ -20,5 +20,5 @@ enum class EventType {
     CREATE,
     MODIFY,
     DELETE,
-    UNKNOWN // caso não seja nenhum
+    UNKNOWN
 };

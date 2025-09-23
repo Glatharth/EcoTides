@@ -1,16 +1,21 @@
 #pragma once
-#include <raylib-cpp.hpp>
+#include <raylib.h>
+
 class Card;
 
 class Animation {
     enum AnimationState { Idle, Dragging, Discarding, Entering, Returning };
+
 public:
     explicit Animation(Card* card);
+    ~Animation();
+
     void setCard(Card* newCard);
     bool needsCardSwap() const;
     void resetSwap();
     void update(float delta);
     void draw();
+
 private:
     Card* card;
     float dragOffsetX = 0.0f;

@@ -1,4 +1,3 @@
-
 #pragma once
 #include <array>
 #include <string>
@@ -28,9 +27,9 @@ private:
     Card* card;
     Animation* animation;
 
-    std::array<std::string, 4> cardPaths;
+    std::array<int, 4> cardIds;
     int cardIndex;
-
+    
     bool playerWon;
     bool playerLost;
 

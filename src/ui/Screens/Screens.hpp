@@ -1,4 +1,3 @@
-
 #pragma once
 #include "utils/enum.hpp"
 #include <raylib.h>

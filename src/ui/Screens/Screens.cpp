@@ -1,34 +1,27 @@
-
 #include "Screens.hpp"
 #include <cstdlib>
 #include "core/game/World.hpp"
 
 extern World* globalWorldInstance;
 
-// ---------------- CONSTRUTOR ----------------
 Screens::Screens() : current(ScreenState::MENU), showConfirmPopup(false), mouseDebounce(false) {
     int w = 300, h = 150;
     int x = GetScreenWidth()/2 - w/2;
     int y = GetScreenHeight()/2 - h/2;
 
-    // Popup
     btnPopupContinue = { (float)(x + 30), (float)(y + 90), 100, 40 };
     btnPopupMenu     = { (float)(x + w - 130), (float)(y + 90), 100, 40 };
 
-    // Vitória
     btnVictoryMenu  = { (float)(x + 30), (float)(y + 200), 100, 40 };
     btnVictoryRetry = { (float)(x + w - 130), (float)(y + 200), 100, 40 };
 
-    // Derrota
     btnDefeatMenu  = { (float)(x + 30), (float)(y + 200), 100, 40 };
     btnDefeatRetry = { (float)(x + w - 130), (float)(y + 200), 100, 40 };
 }
 
-// ------------------ Mudança de tela ------------------
 void Screens::change(ScreenState next) { current = next; }
 ScreenState Screens::getCurrent() const { return current; }
 
-// ------------------ Helpers ------------------
 void Screens::drawCenteredText(const char* text, int y, int fontSize, Color color) {
     int textWidth = MeasureText(text, fontSize);
     int x = (GetScreenWidth() - textWidth) / 2;
@@ -56,7 +49,6 @@ Rectangle Screens::makeButton(int centerX, int startY, int index, int btnWidth, 
              (float)btnHeight };
 }
 
-// ------------------ Telas ------------------
 void Screens::drawMenuScreen() {
     ClearBackground(BLUE);
     drawCenteredText("EcoTides", 80, 50, DARKBLUE);
@@ -109,47 +101,46 @@ void Screens::drawDefeatScreen() {
         if (globalWorldInstance) globalWorldInstance->retry();
 }
 
-// ------------------ Update ------------------
 void Screens::update(float delta) {
-    // Se estamos em debounce, aguardamos o release do botão esquerdo antes de continuar
+
     if (mouseDebounce) {
         if (!IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-            mouseDebounce = false; // mouse liberado -> volta a processar entradas
+            mouseDebounce = false;
         } else {
-            return; // ainda pressionado -> ignora atualização de UI (evita click-through)
+            return;
         }
     }
 
     if (showConfirmPopup) {
         Vector2 mouse = GetMousePosition();
 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-    // Botão Continuar → chama retry do World
+
     if (CheckCollisionPointRec(mouse, btnPopupContinue)) {
         showConfirmPopup = false;
         if (globalWorldInstance)
             globalWorldInstance->retry();
 
-        mouseDebounce = true; // bloqueia novos cliques até o release
+        mouseDebounce = true;
     }
 
 
-            // Botão Menu → volta para o menu
+
             if (CheckCollisionPointRec(mouse, btnPopupMenu)) {
                 showConfirmPopup = false;
                 change(ScreenState::MENU);
 
-                mouseDebounce = true; // bloqueia novos cliques até o release
+                mouseDebounce = true;
             }
         }
         return;
     }
 
-    // Pressionar ENTER abre popup na tela de GAME
+
     if (current == ScreenState::GAME && IsKeyPressed(KEY_ENTER))
         showConfirmPopup = true;
 }
 
-// ------------------ Render ------------------
+
 void Screens::render() {
     switch (current) {
         case ScreenState::MENU: drawMenuScreen(); break;

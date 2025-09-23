@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <raylib-cpp.hpp>
-#include "utils/enum.hpp" // Aqui deve ter o enum PowerType
+#include "utils/enum.hpp"
 
 class Powers {
 public:
@@ -13,8 +13,8 @@ public:
     void drawIcons(int startX, int startY, int size, int spacing);
 
 private:
-    std::string iconPaths[4];    // Caminhos das imagens dos ícones
-    raylib::Texture icons[4];    // Texturas dos ícones (corrigido)
-    float value[4];              // Valor atual do poder
-    float targetValue[4];        // Valor alvo para animação
+    std::string iconPaths[4];
+    raylib::Texture icons[4]; 
+    float value[4];
+    float targetValue[4];
 };

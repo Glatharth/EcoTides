@@ -1,8 +1,6 @@
-
 #include "World.hpp"
 #include <iostream>
 #include <raylib-cpp.hpp>
-#include "ui/Powers/Powers.hpp"
 
 World* globalWorldInstance = nullptr;
 
@@ -26,66 +24,42 @@ ScreenState World::getCurrent() const {
     return screen->getCurrent();
 }
 
-// ------------------ Start Game ------------------
 void World::startGame() {
-    if (!loader.IsLoaded()) {
-        std::cerr << "Erro: XML de cartas não carregado!" << std::endl;
-        return;
-    }
+    cardIds[0] = 1;
+    cardIds[1] = 2;
+    cardIds[2] = 3;
+    cardIds[3] = 4;
 
-    // Carrega os paths das cartas
-    for (int i = 0; i < 4; ++i)
-        cardPaths[i] = loader.GetCardPath(i + 1);
-
-    // Cria a primeira carta
-    if (card) delete card;
-    card = new Card(cardPaths[0]);
-
-    // ✅ Atualiza o tamanho da tela na classe Card antes da animação
-    Card::UpdateScreenSize(raylib::Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() });
-
-    // Cria animação
-    if (animation) delete animation;
+    card = new Card(0, loader);
     animation = new Animation(card);
-
-    // Próxima carta
     cardIndex = 1;
 
-    // Reseta poderes e flags
-    powers->reset();
     playerWon = false;
     playerLost = false;
 
-    // Muda a tela para GAME
     screen->change(ScreenState::GAME);
 }
 
-// ------------------ Swap Card ------------------
 void World::cardSwap() {
-    if (!animation || cardPaths.empty()) return;
     if (card) delete card;
-    card = new Card(cardPaths[cardIndex]);
-    animation->setCard(card);
+    card = new Card(cardIds[cardIndex], loader);   
     cardIndex = (cardIndex + 1) % 4;
+    animation->setCard(card);
 }
 
-// ------------------ Retry ------------------
 void World::retry() {
     if (card) { delete card; card = nullptr; }
     if (animation) { delete animation; animation = nullptr; }
-    startGame(); // reinicia o jogo
+    startGame(); 
 }
 
-// ------------------ Update ------------------
 void World::update(float delta) {
     ScreenState prev = screen->getCurrent();
 
-    // Se entramos no GAME, mas não há carta, inicia o jogo
     if (screen->getCurrent() == ScreenState::GAME && card == nullptr) {
-        startGame(); // cria a primeira carta e animação
+        startGame(); 
     }
 
-    // Atualiza animação de cartas
     if (animation) {
         animation->update(delta);
         if (animation->needsCardSwap()) {
@@ -94,25 +68,20 @@ void World::update(float delta) {
         }
     }
 
-    // Atualiza a tela
     screen->update(delta);
 
-    // Reset dos poderes ao entrar na tela de GAME
     if (screen->getCurrent() == ScreenState::GAME && prev != ScreenState::GAME) {
         powers->reset();
         playerWon = false;
         playerLost = false;
-        // Reset de cartas
-        if (card) delete card;
-        card = new Card(cardPaths[0]);
-        if (animation) animation->setCard(card);
-        cardIndex = 1;
+    if (card) delete card;
+    card = new Card(cardIds[cardIndex], loader);
+    if (animation) animation->setCard(card);
+    cardIndex = 1;
     }
 
-    // Atualiza poderes (suavização/animados)
     powers->update(delta);
 
-    // ---------------- Controles de teste (teclado) ----------------
     if (IsKeyPressed(KEY_Q)) powers->applyChange(PowerType::ECONOMY, +5);
     if (IsKeyPressed(KEY_A)) powers->applyChange(PowerType::ECONOMY, -5);
     if (IsKeyPressed(KEY_W)) powers->applyChange(PowerType::AWARENESS, +5);
@@ -122,7 +91,6 @@ void World::update(float delta) {
     if (IsKeyPressed(KEY_R)) powers->applyChange(PowerType::TRASH_ACCUMULATION, +5);
     if (IsKeyPressed(KEY_F)) powers->applyChange(PowerType::TRASH_ACCUMULATION, -5);
 
-    // ---------------- Condições de vitória/derrota ----------------
     if (powers->getValue(PowerType::ECONOMY) <= 0 ||
     powers->getValue(PowerType::AWARENESS) <= 0 ||
     powers->getValue(PowerType::TRASH_COLLECTION) <= 0 ||
@@ -138,7 +106,6 @@ else if (powers->getValue(PowerType::ECONOMY) >= 70 &&
     playerWon = true;
 }
 
-    // Aplica mudança de tela
     if (playerWon && screen->getCurrent() != ScreenState::VICTORY)
         screen->change(ScreenState::VICTORY);
     else if (playerLost && screen->getCurrent() != ScreenState::DEFEAT)
@@ -146,7 +113,6 @@ else if (powers->getValue(PowerType::ECONOMY) >= 70 &&
 }
 
 
-// ------------------ Draw Powers ------------------
 void World::drawPowers() {
     if (!powers) return;
     if (screen->getCurrent() != ScreenState::GAME) return;
@@ -159,18 +125,15 @@ void World::drawPowers() {
     powers->drawIcons(startX, startY, size, spacing);
 }
 
-// ------------------ Draw ------------------
 void World::draw() {
     BeginDrawing();
     ClearBackground(BLUE);
 
-    // Renderiza a tela atual (menu, vitória, derrota, opções, etc.)
     screen->render();
 
-    // Desenha barras de poderes e carta apenas na tela de jogo
     if (!screen->isPopupActive() && screen->getCurrent() == ScreenState::GAME) {
-        drawPowers();            // Barras de poderes
-        if (animation) animation->draw();  // Carta animada
+        drawPowers();            
+        if (animation) animation->draw();
     }
 
     DrawFPS(20, 20);
