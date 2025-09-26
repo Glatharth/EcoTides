@@ -15,7 +15,6 @@ public:
     ~Card();
 
     void Draw(const raylib::Color& color = WHITE) const;
-
     void SetFilter(TextureFilter filter) { texture.SetFilter(filter); }
 
     const raylib::Texture& GetTexture() const { return texture; }
@@ -36,7 +35,6 @@ public:
         const auto it = resources.find(type);
         return (it != resources.end()) ? it->second : 0;
     }
-
     bool IsLoaded() const { return loaded; }
 
     friend class Animation;

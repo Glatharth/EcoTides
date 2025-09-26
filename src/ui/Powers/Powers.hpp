@@ -7,8 +7,8 @@ class Powers {
 public:
     Powers();
     void reset();
-    void applyChange(PowerType type, int delta);
-    int getValue(PowerType type) const;
+    void applyChange(ResourceType type, int delta);
+    int getValue(ResourceType type) const;
     void update(float delta);
     void drawIcons(int startX, int startY, int size, int spacing);
 

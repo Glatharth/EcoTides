@@ -4,6 +4,8 @@
 #include <raylib-cpp.hpp>
 
 World* globalWorldInstance = nullptr;
+std::vector<uint8_t> World::seed{};
+size_t World::currentIndex = 0;
 
 World::World()
     : screen(new Screens()), powers(new Powers()),
@@ -27,12 +29,8 @@ ScreenState World::getCurrent() const {
 }
 
 void World::startGame() {
-    cardIds[0] = 1;
-    cardIds[1] = 2;
-    cardIds[2] = 3;
-    cardIds[3] = 4;
-
-    card = new Card(nextCard());
+    cardIds = {1,2,3,4};
+    card = new Card(nextCard(), loader);
     animation = new Animation(card);
 
     playerWon = false;
@@ -43,7 +41,7 @@ void World::startGame() {
 
 void World::cardSwap() {
     if (card) delete card;
-    card = new Card(nextCard());
+    card = new Card(nextCard(), loader);
     animation->setCard(card);
 }
 
@@ -82,26 +80,17 @@ void World::update(float delta) {
 
     powers->update(delta);
 
-    if (IsKeyPressed(KEY_Q)) powers->applyChange(PowerType::ECONOMY, +5);
-    if (IsKeyPressed(KEY_A)) powers->applyChange(PowerType::ECONOMY, -5);
-    if (IsKeyPressed(KEY_W)) powers->applyChange(PowerType::AWARENESS, +5);
-    if (IsKeyPressed(KEY_S)) powers->applyChange(PowerType::AWARENESS, -5);
-    if (IsKeyPressed(KEY_E)) powers->applyChange(PowerType::TRASH_COLLECTION, +5);
-    if (IsKeyPressed(KEY_D)) powers->applyChange(PowerType::TRASH_COLLECTION, -5);
-    if (IsKeyPressed(KEY_R)) powers->applyChange(PowerType::TRASH_ACCUMULATION, +5);
-    if (IsKeyPressed(KEY_F)) powers->applyChange(PowerType::TRASH_ACCUMULATION, -5);
-
-    if (powers->getValue(PowerType::ECONOMY) <= 0 ||
-    powers->getValue(PowerType::AWARENESS) <= 0 ||
-    powers->getValue(PowerType::TRASH_COLLECTION) <= 0 ||
-    powers->getValue(PowerType::TRASH_ACCUMULATION) >= 100)
+    if (powers->getValue(ResourceType::ECONOMY) <= 0 ||
+    powers->getValue(ResourceType::POPULATION_AWARENESS) <= 0 ||
+    powers->getValue(ResourceType::WASTE_COLLECTION) <= 0 ||
+    powers->getValue(ResourceType::WASTE_ACCUMULATION) >= 100)
 {
     playerLost = true;
 } 
-else if (powers->getValue(PowerType::ECONOMY) >= 70 &&
-         powers->getValue(PowerType::AWARENESS) >= 70 &&
-         powers->getValue(PowerType::TRASH_COLLECTION) >= 70 &&
-         powers->getValue(PowerType::TRASH_ACCUMULATION) <= 30)
+else if (powers->getValue(ResourceType::ECONOMY) >= 70 &&
+         powers->getValue(ResourceType::POPULATION_AWARENESS) >= 70 &&
+         powers->getValue(ResourceType::WASTE_COLLECTION) >= 70 &&
+         powers->getValue(ResourceType::WASTE_ACCUMULATION) <= 30)
 {
     playerWon = true;
 }

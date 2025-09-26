@@ -32,14 +32,14 @@ void Powers::reset() {
     }
 }
 
-void Powers::applyChange(PowerType type, int delta) {
+void Powers::applyChange(ResourceType type, int delta) {
     int idx = static_cast<int>(type);
     targetValue[idx] += delta;
     if (targetValue[idx] < 0) targetValue[idx] = 0;
     if (targetValue[idx] > 100) targetValue[idx] = 100;
 }
 
-int Powers::getValue(PowerType type) const {
+int Powers::getValue(ResourceType type) const {
     return value[static_cast<int>(type)];
 }
 

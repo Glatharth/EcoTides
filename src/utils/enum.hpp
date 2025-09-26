@@ -7,12 +7,11 @@ enum class EventType {
     DELETE,
 };
 
-enum class PowerType {
-    ECONOMY = 0,
-    AWARENESS,
-    TRASH_COLLECTION,
-    TRASH_ACCUMULATION,
-    COUNT
+enum class ResourceType {
+    ECONOMY,
+    POPULATION_AWARENESS,
+    WASTE_COLLECTION,
+    WASTE_ACCUMULATION
 };
 
 enum class ScreenState {

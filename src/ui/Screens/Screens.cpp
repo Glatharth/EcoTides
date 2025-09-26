@@ -54,29 +54,18 @@ void Screens::drawMenuScreen() {
     drawCenteredText("EcoTides", 80, 50, DARKBLUE);
 
     int centerX = GetScreenWidth() / 2;
-    int startY = (GetScreenHeight() - (3 * 50 + 2 * 20)) / 2;
+    int startY = (GetScreenHeight() - (2 * 50 + 1 * 20)) / 2;
 
     if (drawButton(makeButton(centerX, startY, 0, 200, 50, 20), "START GAME", LIGHTGRAY, SKYBLUE))
         change(ScreenState::GAME);
-    if (drawButton(makeButton(centerX, startY, 1, 200, 50, 20), "OPTIONS", LIGHTGRAY, SKYBLUE))
-        change(ScreenState::OPTIONS);
-    if (drawButton(makeButton(centerX, startY, 2, 200, 50, 20), "EXIT", LIGHTGRAY, SKYBLUE))
+
+    if (drawButton(makeButton(centerX, startY, 1, 200, 50, 20), "EXIT", LIGHTGRAY, SKYBLUE))
         exit(0);
 }
 
+
 void Screens::drawGameScreen() {
     ClearBackground(BLUE);
-}
-
-void Screens::drawOptionsScreen() {
-    ClearBackground(LIGHTGRAY);
-    drawCenteredText("OPTIONS MENU", 120, 40, BLACK);
-
-    int centerX = GetScreenWidth() / 2;
-    int startY = GetScreenHeight() / 2;
-
-    if (drawButton(makeButton(centerX, startY, 0, 200, 50, 20), "BACK", RAYWHITE, SKYBLUE))
-        change(ScreenState::MENU);
 }
 
 void Screens::drawVictoryScreen() {
@@ -147,7 +136,6 @@ void Screens::render() {
         case ScreenState::GAME: drawGameScreen(); break;
         case ScreenState::VICTORY: drawVictoryScreen(); break;
         case ScreenState::DEFEAT: drawDefeatScreen(); break;
-        case ScreenState::OPTIONS: drawOptionsScreen(); break;
     }
 
     if (showConfirmPopup) {

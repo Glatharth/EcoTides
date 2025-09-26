@@ -30,7 +30,6 @@ public:
     Rectangle makeButton(int centerX,int startY,int index,int btnWidth,int btnHeight,int spacing);
     void drawMenuScreen();
     void drawGameScreen();
-    void drawOptionsScreen();
     void drawVictoryScreen();
     void drawDefeatScreen();
 };
