@@ -2,26 +2,29 @@
 #include <iostream>
 #include "io/FileLoader.hpp"
 
-Card::Card(int cardId, FileLoader& loader) : id(cardId) {
-    InitializeStatic();
+Card::Card(const int cardId) : id(cardId) {
+   InitializeStatic();
 
-    if (!loader.IsLoaded()) {
-        std::cerr << "Error: Could not load XML file" << std::endl;
-        return;
-    }
+   const FileLoader fileLoader;
 
-    if (!loader.CardExists(cardId)) {
-        std::cerr << "Error: Card ID " << cardId << " not found in XML" << std::endl;
-        return;
-    }
+   if (!fileLoader.IsLoaded()) {
+      std::cerr << "Error: Could not load XML file" << std::endl;
+      return;
+   }
 
-    path = loader.GetCardPath(cardId);
-    eventType = loader.GetCardEventType(cardId);
+   if (!fileLoader.CardExists(cardId)) {
+      std::cerr << "Error: Card ID " << cardId << " not found in XML" << std::endl;
+      return;
+   }
 
-    if (!FileLoader::PathExists(path)) {
-        std::cerr << "Error: Path does not exist: " << path << std::endl;
-        return;
-    }
+   path = fileLoader.GetCardPath(cardId);
+   eventType = fileLoader.GetCardEventType(cardId);
+   resources = fileLoader.GetCardResources(cardId);
+
+   if (!FileLoader::PathExists(path)) {
+      std::cerr << "Error: Path does not exist: " << path << std::endl;
+      return;
+   }
 
     loaded = LoadImage();
 

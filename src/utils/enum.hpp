@@ -1,11 +1,10 @@
 #pragma once
 
-enum class ScreenState {
-    MENU,
-    GAME,
-    VICTORY,
-    DEFEAT,
-    OPTIONS
+enum class EventType {
+    UNKNOWN,
+    CREATE,
+    MODIFY,
+    DELETE,
 };
 
 enum class PowerType {
@@ -16,9 +15,16 @@ enum class PowerType {
     COUNT
 };
 
-enum class EventType {
-    CREATE,
-    MODIFY,
-    DELETE,
-    UNKNOWN
+enum class ScreenState {
+    MENU,
+    GAME,
+    VICTORY,
+    DEFEAT
+};
+
+enum class GameDifficulty {
+    NORMAL,
+    HARD,
+    HARDCORE,
+    ZOIO,
 };

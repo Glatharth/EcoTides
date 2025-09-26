@@ -1,30 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cards>
-    <card id="1" path="assets/card1.png" eventType="CREATE">
+    <card id="1" path="assets/card1.png" eventType="CREATE" quantity="2">
+        <resource type="Economy" value="3"/>
+        <resource type="Population Awareness" value="-2"/>
+        <resource type="Waste Collection" value="1"/>
+        <resource type="Waste Accumulation" value="4"/>
         <parents>
-            <parent id="100" steps="2"/>
-            <parent id="101" steps="1"/>
-            <parent id="102" steps="3"/>
+            <parent id="5" steps="3"/>
+            <parent id="12" steps="6"/>
         </parents>
     </card>
 
-    <card id="2" path="assets/card2.png" eventType="CREATE">
+    <card id="2" path="assets/card2.png" eventType="CREATE" quantity="1">
+        <resource type="Economy" value="-1"/>
+        <resource type="Population Awareness" value="5"/>
+        <resource type="Waste Collection" value="2"/>
+        <resource type="Waste Accumulation" value="-3"/>
         <parents>
-            <parent id="200" steps="1"/>
-            <parent id="201" steps="2"/>
+            <parent id="8" steps="2"/>
         </parents>
     </card>
 
-    <card id="3" path="assets/card3.png" eventType="CREATE">
+    <card id="3" path="assets/card3.png" eventType="CREATE" quantity="3">
+        <resource type="Economy" value="2"/>
+        <resource type="Population Awareness" value="1"/>
+        <resource type="Waste Collection" value="-4"/>
+        <resource type="Waste Accumulation" value="-1"/>
+    </card>
+
+    <card id="4" path="assets/card4.png" eventType="CREATE" quantity="2">
+        <resource type="Economy" value="-3"/>
+        <resource type="Population Awareness" value="4"/>
+        <resource type="Waste Collection" value="0"/>
+        <resource type="Waste Accumulation" value="2"/>
         <parents>
-            <parent id="300" steps="0"/>
+            <parent id="15" steps="5"/>
+            <parent id="19" steps="1"/>
         </parents>
     </card>
 
-    <card id="4" path="assets/card4.png" eventType="CREATE">
+    <card id="5" path="assets/card1.png" eventType="CREATE" quantity="1">
+        <resource type="Economy" value="5"/>
+        <resource type="Population Awareness" value="-4"/>
+        <resource type="Waste Collection" value="3"/>
+        <resource type="Waste Accumulation" value="-2"/>
+    </card>
+
+    <card id="6" path="assets/card2.png" eventType="CREATE" quantity="3">
+        <resource type="Economy" value="-2"/>
+        <resource type="Population Awareness" value="3"/>
+        <resource type="Waste Collection" value="-5"/>
+        <resource type="Waste Accumulation" value="1"/>
         <parents>
-            <parent id="400" steps="1"/>
-            <parent id="401" steps="2"/>
+            <parent id="10" steps="4"/>
         </parents>
+    </card>
+
+    <card id="7" path="assets/card3.png" eventType="CREATE" quantity="2">
+        <resource type="Economy" value="1"/>
+        <resource type="Population Awareness" value="2"/>
+        <resource type="Waste Collection" value="4"/>
+        <resource type="Waste Accumulation" value="-4"/>
+    </card>
+
+    <card id="8" path="assets/card4.png" eventType="CREATE" quantity="1">
+        <resource type="Economy" value="4"/>
+        <resource type="Population Awareness" value="-1"/>
+        <resource type="Waste Collection" value="-3"/>
+        <resource type="Waste Accumulation" value="5"/>
+        <parents>
+            <parent id="3" steps="7"/>
+            <parent id="17" steps="2"/>
+        </parents>
+    </card>
+
+    <card id="9" path="assets/card1.png" eventType="CREATE" quantity="3">
+        <resource type="Economy" value="-4"/>
+        <resource type="Population Awareness" value="0"/>
+        <resource type="Waste Collection" value="2"/>
+        <resource type="Waste Accumulation" value="-5"/>
+    </card>
+
+    <card id="10" path="assets/card2.png" eventType="CREATE" quantity="2">
+        <resource type="Economy" value="0"/>
+        <resource type="Population Awareness" value="-3"/>
+        <resource type="Waste Collection" value="5"/>
+        <resource type="Waste Accumulation" value="3"/>
+        <parents>
+            <parent id="14" steps="8"/>
+        </parents>
+    </card>
+
+    <card id="11" path="assets/card3.png" eventType="CREATE" quantity="1">
+        <resource type="Economy" value="3"/>
+        <resource type="Population Awareness" value="5"/>
+        <resource type="Waste Collection" value="-2"/>
+        <resource type="Waste Accumulation" value="-1"/>
+    </card>
+
+    <card id="12" path="assets/card4.png" eventType="CREATE" quantity="3">
+        <resource type="Economy" value="-5"/>
+        <resource type="Population Awareness" value="2"/>
+        <resource type="Waste Collection" value="1"/>
+        <resource type="Waste Accumulation" value="0"/>
+    </card>
+
+    <card id="13" path="assets/card1.png" eventType="CREATE" quantity="2">
+        <resource type="Economy" value="2"/>
+        <resource type="Population Awareness" value="-5"/>
+        <resource type="Waste Collection" value="-1"/>
+        <resource type="Waste Accumulation" value="4"/>
+        <parents>
+            <parent id="6" steps="3"/>
+            <parent id="20" steps="1"/>
+        </parents>
+    </card>
+
+    <card id="14" path="assets/card2.png" eventType="CREATE" quantity="1">
+        <resource type="Economy" value="1"/>
+        <resource type="Population Awareness" value="4"/>
+        <resource type="Waste Collection" value="0"/>
+        <resource type="Waste Accumulation" value="-2"/>
+    </card>
+
+    <card id="15" path="assets/card3.png" eventType="CREATE" quantity="3">
+        <resource type="Economy" value="-1"/>
+        <resource type="Population Awareness" value="-2"/>
+        <resource type="Waste Collection" value="3"/>
+        <resource type="Waste Accumulation" value="5"/>
+    </card>
+
+    <card id="16" path="assets/card4.png" eventType="CREATE" quantity="2">
+        <resource type="Economy" value="5"/>
+        <resource type="Population Awareness" value="1"/>
+        <resource type="Waste Collection" value="-4"/>
+        <resource type="Waste Accumulation" value="-3"/>
+        <parents>
+            <parent id="9" steps="5"/>
+        </parents>
+    </card>
+
+    <card id="17" path="assets/card1.png" eventType="CREATE" quantity="1">
+        <resource type="Economy" value="-3"/>
+        <resource type="Population Awareness" value="0"/>
+        <resource type="Waste Collection" value="4"/>
+        <resource type="Waste Accumulation" value="2"/>
+    </card>
+
+    <card id="18" path="assets/card2.png" eventType="CREATE" quantity="3">
+        <resource type="Economy" value="4"/>
+        <resource type="Population Awareness" value="-4"/>
+        <resource type="Waste Collection" value="-2"/>
+        <resource type="Waste Accumulation" value="1"/>
+        <parents>
+            <parent id="2" steps="6"/>
+            <parent id="11" steps="4"/>
+        </parents>
+    </card>
+
+    <card id="19" path="assets/card3.png" eventType="CREATE" quantity="2">
+        <resource type="Economy" value="0"/>
+        <resource type="Population Awareness" value="3"/>
+        <resource type="Waste Collection" value="-5"/>
+        <resource type="Waste Accumulation" value="-4"/>
+    </card>
+
+    <card id="20" path="assets/card4.png" eventType="CREATE" quantity="1">
+        <resource type="Economy" value="-2"/>
+        <resource type="Population Awareness" value="-1"/>
+        <resource type="Waste Collection" value="5"/>
+        <resource type="Waste Accumulation" value="3"/>
     </card>
 </cards>

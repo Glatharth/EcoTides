@@ -66,6 +66,51 @@ EventType FileLoader::GetCardEventType(int cardId) const {
     return EventType::UNKNOWN;
 }
 
+std::map<ResourceType, int> FileLoader::GetCardResources(const int cardId) const {
+    std::map<ResourceType, int> resources;
+    const pugi::xml_node card = FindCardNode(cardId);
+    if (!card) return resources;
+
+    for (pugi::xml_node res : card.children("resource")) {
+        std::string typeStr = res.attribute("type").as_string();
+        int value = res.attribute("value").as_int();
+
+        if (typeStr == "Economy") resources[ResourceType::ECONOMY] = value;
+        else if (typeStr == "Population Awareness") resources[ResourceType::POPULATION_AWARENESS] = value;
+        else if (typeStr == "Waste Collection") resources[ResourceType::WASTE_COLLECTION] = value;
+        else if (typeStr == "Waste Accumulation") resources[ResourceType::WASTE_ACCUMULATION] = value;
+    }
+    return resources;
+}
+
+int FileLoader::GetCardResourceType(const int cardId, const ResourceType resource) const {
+    const auto resources = GetCardResources(cardId);
+    if (const auto it = resources.find(resource); it != resources.end()) {
+        return it->second;
+    }
+    return 0;
+}
+
+int FileLoader::GetCardQuantity(const int cardId) const {
+    if (const pugi::xml_node card = FindCardNode(cardId)) {
+        return card.attribute("quantity").as_int(1);
+    }
+    return 1;
+}
+
+std::vector<std::pair<int, int>> FileLoader::GetCardParents(int cardId) const {
+    std::vector<std::pair<int, int>> parents;
+    pugi::xml_node card = FindCardNode(cardId);
+    if (!card) return parents;
+    for (pugi::xml_node parent : card.child("parents").children("parent")) {
+        int parentId = parent.attribute("id").as_int();
+        int steps = parent.attribute("steps").as_int();
+        parents.emplace_back(parentId, steps);
+    }
+    return parents;
+}
+
+
 bool FileLoader::CardExists(int cardId) const {
     return FindCardNode(cardId).type() != pugi::node_null;
 }

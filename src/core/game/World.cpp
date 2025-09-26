@@ -1,4 +1,5 @@
 #include "World.hpp"
+#include "utils/utils.hpp"
 #include <iostream>
 #include <raylib-cpp.hpp>
 
@@ -11,6 +12,7 @@ World::World()
       loader("src/xml/cards.xml") 
 {
     globalWorldInstance = this;
+    generateSeed(&seed, GameDifficulty::HARD);
 }
 
 World::~World() {
@@ -30,9 +32,8 @@ void World::startGame() {
     cardIds[2] = 3;
     cardIds[3] = 4;
 
-    card = new Card(0, loader);
+    card = new Card(nextCard());
     animation = new Animation(card);
-    cardIndex = 1;
 
     playerWon = false;
     playerLost = false;
@@ -42,8 +43,7 @@ void World::startGame() {
 
 void World::cardSwap() {
     if (card) delete card;
-    card = new Card(cardIds[cardIndex], loader);   
-    cardIndex = (cardIndex + 1) % 4;
+    card = new Card(nextCard());
     animation->setCard(card);
 }
 
