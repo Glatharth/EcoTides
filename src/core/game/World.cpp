@@ -1,34 +1,36 @@
 #include "World.hpp"
 #include "utils/utils.hpp"
-
+#include <iostream>
+#include <raylib-cpp.hpp>
 
 World* globalWorldInstance = nullptr;
-std::vector<uint8_t> World::seed;
+std::vector<uint8_t> World::seed{};
 size_t World::currentIndex = 0;
 
-void startGameWrapper() {
-    if (globalWorldInstance) {
-        globalWorldInstance->startGame();
-    }
-}
-
-World::World() : card(nullptr), animation(nullptr), playerWon(false), playerLost(false) {
+World::World()
+    : screen(new Screens()), powers(new Powers()),
+      card(nullptr), animation(nullptr),
+      cardIndex(0), playerWon(false), playerLost(false),
+      loader("src/xml/cards.xml") 
+{
     globalWorldInstance = this;
-
-    screen = new Screens();
-    screen->change(ScreenState::MENU);
-    screen->setStartGameCallback(startGameWrapper);
     generateSeed(&seed, GameDifficulty::HARD);
 }
 
 World::~World() {
-    if (animation) delete animation;
-    if (card) delete card;
     delete screen;
+    delete powers;
+    if (card) delete card;
+    if (animation) delete animation;
+}
+
+ScreenState World::getCurrent() const {
+    return screen->getCurrent();
 }
 
 void World::startGame() {
-    card = new Card(nextCard());
+    cardIds = {1,2,3,4};
+    card = new Card(nextCard(), loader);
     animation = new Animation(card);
 
     playerWon = false;
@@ -39,58 +41,88 @@ void World::startGame() {
 
 void World::cardSwap() {
     if (card) delete card;
-    card = new Card(nextCard());
+    card = new Card(nextCard(), loader);
     animation->setCard(card);
 }
 
+void World::retry() {
+    if (card) { delete card; card = nullptr; }
+    if (animation) { delete animation; animation = nullptr; }
+    startGame(); 
+}
+
 void World::update(float delta) {
+    ScreenState prev = screen->getCurrent();
+
+    if (screen->getCurrent() == ScreenState::GAME && card == nullptr) {
+        startGame(); 
+    }
+
     if (animation) {
         animation->update(delta);
-
         if (animation->needsCardSwap()) {
             cardSwap();
             animation->resetSwap();
         }
-        /* IMPLEMENTAR CONDICOES DE VITÓRIA/DERROTA
-        if ((condicao de vitoria)false) {
-            playerWon = true;
-            screen->change(ScreenState::VICTORY);
-        }
-        else if ((condição de derrota)false) {
-            playerLost = true;
-            screen->change(ScreenState::DEFEAT);
-        }
-        */
-        //condicoes de vitória/derrota temporárias para teste
-        if (playerWon) {
-            // Garante que só mude uma vez para a tela de vitória
-            if (screen->getCurrentScreen() != ScreenState::VICTORY) {
-                screen->change(ScreenState::VICTORY);
-            }
-        }
-        else if (playerLost) {
-            if (screen->getCurrentScreen() != ScreenState::DEFEAT) {
-                screen->change(ScreenState::DEFEAT);
-            }
-        }
-        else {
-            if (screen->getCurrentScreen() != ScreenState::GAME) {
-                screen->change(ScreenState::GAME);
-            }
-        }
     }
 
     screen->update(delta);
+
+    if (screen->getCurrent() == ScreenState::GAME && prev != ScreenState::GAME) {
+        powers->reset();
+        playerWon = false;
+        playerLost = false;
+    if (card) delete card;
+    card = new Card(cardIds[cardIndex], loader);
+    if (animation) animation->setCard(card);
+    cardIndex = 1;
+    }
+
+    powers->update(delta);
+
+    if (powers->getValue(ResourceType::ECONOMY) <= 0 ||
+    powers->getValue(ResourceType::POPULATION_AWARENESS) <= 0 ||
+    powers->getValue(ResourceType::WASTE_COLLECTION) <= 0 ||
+    powers->getValue(ResourceType::WASTE_ACCUMULATION) >= 100)
+{
+    playerLost = true;
+} 
+else if (powers->getValue(ResourceType::ECONOMY) >= 70 &&
+         powers->getValue(ResourceType::POPULATION_AWARENESS) >= 70 &&
+         powers->getValue(ResourceType::WASTE_COLLECTION) >= 70 &&
+         powers->getValue(ResourceType::WASTE_ACCUMULATION) <= 30)
+{
+    playerWon = true;
+}
+
+    if (playerWon && screen->getCurrent() != ScreenState::VICTORY)
+        screen->change(ScreenState::VICTORY);
+    else if (playerLost && screen->getCurrent() != ScreenState::DEFEAT)
+        screen->change(ScreenState::DEFEAT);
+}
+
+
+void World::drawPowers() {
+    if (!powers) return;
+    if (screen->getCurrent() != ScreenState::GAME) return;
+
+    int startX = 50;
+    int startY = GetScreenHeight() - 150;
+    int size   = 64;
+    int spacing = 80;
+
+    powers->drawIcons(startX, startY, size, spacing);
 }
 
 void World::draw() {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLUE);
 
     screen->render();
 
-    if (animation) {
-        animation->draw();
+    if (!screen->isPopupActive() && screen->getCurrent() == ScreenState::GAME) {
+        drawPowers();            
+        if (animation) animation->draw();
     }
 
     DrawFPS(20, 20);

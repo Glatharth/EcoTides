@@ -1,17 +1,15 @@
 #include "FileLoader.hpp"
 #include <iostream>
 #include <filesystem>
-#include <unordered_map>
+
 
 FileLoader::FileLoader() {
-    loaded = LoadXML("src/xml/cards.xml"); // temp until another XML file appears
-    if (!loaded) {
-        std::cerr << "Failed to load default XML file 'cards.xml'" << std::endl;
-    }
+    loaded = false;  
+    xmlFilePath = "";
 }
 
 FileLoader::FileLoader(const std::string& xmlFilePath) {
-    loaded = LoadXML(xmlFilePath);
+    loaded = LoadXML(xmlFilePath); 
 }
 
 FileLoader::~FileLoader() = default;
@@ -21,10 +19,10 @@ bool FileLoader::LoadXML(const std::string& filePath) {
     result = doc.load_file(filePath.c_str());
 
     if (result) {
-        std::cout << "XML [" << filePath << "] loaded successfully" << std::endl;
+        std::cout << "XML [" << filePath << "] carregado com sucesso" << std::endl;
         return true;
     }
-    std::cerr << "Error loading XML [" << filePath << "]: "
+    std::cerr << "Erro ao carregar XML [" << filePath << "]: "
               << result.description() << std::endl;
     return false;
 }
@@ -36,14 +34,13 @@ bool FileLoader::IsLoaded() const {
 pugi::xml_node FileLoader::FindCardNode(int cardId) const {
     if (!loaded) return {};
 
-    // Search for a card with the specified ID
     for (pugi::xml_node card : doc.child("cards").children("card")) {
         if (card.attribute("id").as_int() == cardId) {
             return card;
         }
     }
 
-    return {}; // Return empty node if not found
+    return {};
 }
 
 std::string FileLoader::GetCardPath(int cardId) const {
@@ -61,8 +58,8 @@ EventType FileLoader::GetCardEventType(int cardId) const {
             {"DELETE", EventType::DELETE}
         };
 
-        const std::string eventTypeStr = card.attribute("eventType").as_string();
-        if (const auto it = eventTypeMap.find(eventTypeStr); it != eventTypeMap.end()) {
+        std::string eventTypeStr = card.attribute("eventType").as_string();
+        if (auto it = eventTypeMap.find(eventTypeStr); it != eventTypeMap.end()) {
             return it->second;
         }
     }
@@ -124,12 +121,12 @@ bool FileLoader::PathExists(const std::string& path) {
 
 void FileLoader::LoadAllCards() const {
     if (!loaded) {
-        std::cout << "XML was not loaded correctly" << std::endl;
+        std::cout << "XML não carregado corretamente" << std::endl;
         return;
     }
 
     pugi::xml_node cards = doc.child("cards");
-    std::cout << "Cards found in XML:" << std::endl;
+    std::cout << "Cartas encontradas no XML:" << std::endl;
 
     for (pugi::xml_node card : cards.children("card")) {
         int id = card.attribute("id").as_int();
@@ -139,7 +136,7 @@ void FileLoader::LoadAllCards() const {
         std::cout << "Card ID: " << id
                   << ", Path: " << path
                   << ", EventType: " << eventType
-                  << ", Path exists: " << (PathExists(path) ? "Yes" : "No")
+                  << ", Path existe: " << (PathExists(path) ? "Sim" : "Não")
                   << std::endl;
     }
 }

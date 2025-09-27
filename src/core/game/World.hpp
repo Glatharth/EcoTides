@@ -1,12 +1,13 @@
 #pragma once
+#include <array>
+#include <string>
+#include "ui/Screens/Screens.hpp"
+#include "ui/Powers/Powers.hpp"
 #include <cstdint>
-#include <raylib-cpp.hpp>
 #include "ui/card/Card.hpp"
 #include "ui/animation/Animation.hpp"
+#include "io/FileLoader.hpp"
 #include "utils/enum.hpp"
-#include "ui/screen/Screen.hpp"
-
-#pragma once
 
 class World {
 public:
@@ -32,18 +33,33 @@ public:
 
     static int getNextCard() {
         if (seed.empty()) return 1;
-        return seed[(currentIndex) % seed.size()]; // Next card
+        return seed[(currentIndex) % seed.size()];
     }
+
+    ScreenState getCurrent() const;
+    void retry();
 
 private:
     Screens* screen;
+    Powers* powers;
+
     Card* card;
     Animation* animation;
 
+    std::array<int, 4> cardIds;
+    int cardIndex;
+    
+
     bool playerWon;
     bool playerLost;
+
+    FileLoader loader;
+
     void cardSwap();
+    void drawPowers();
 
     static std::vector<uint8_t> seed;
     static size_t currentIndex;
 };
+
+extern World* globalWorldInstance;

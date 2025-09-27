@@ -17,7 +17,6 @@ enum class ResourceType {
 enum class ScreenState {
     MENU,
     GAME,
-    OPTIONS,
     VICTORY,
     DEFEAT
 };

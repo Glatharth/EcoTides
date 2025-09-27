@@ -5,27 +5,24 @@
 #include <map>
 #include <raylib-cpp.hpp>
 #include <string>
-#include <memory>
-
 #include "utils/enum.hpp"
+
+class FileLoader;
 
 class Card {
 public:
-    explicit Card(int cardId);
-
+    explicit Card(int cardId, FileLoader& loader);
     ~Card();
 
     void Draw(const raylib::Color& color = WHITE) const;
+    void SetFilter(TextureFilter filter) { texture.SetFilter(filter); }
+
+    const raylib::Texture& GetTexture() const { return texture; }
 
     static void UpdateScreenSize(const raylib::Vector2& newSize) {
         screenSize = newSize;
         UpdatePosition();
     }
-
-    void SetFilter(TextureFilter filter) {
-        texture.SetFilter(filter);
-    }
-
     static raylib::Vector2 GetScreenSize() { return screenSize; }
     static raylib::Vector2 GetPosition() { return position; }
     static int GetSquareSize() { return squareSize; }
@@ -38,7 +35,6 @@ public:
         const auto it = resources.find(type);
         return (it != resources.end()) ? it->second : 0;
     }
-
     bool IsLoaded() const { return loaded; }
 
     friend class Animation;
