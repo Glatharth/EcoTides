@@ -2,15 +2,10 @@
 #include <raylib.h>
 
 class Card;
+
 class Animation {
-//estados possíveis da animação
-enum AnimationState {
-    Idle,
-    Dragging,
-    Discarding,
-    Entering,
-    Returning
-};
+    enum AnimationState { Idle, Dragging, Discarding, Entering, Returning };
+
 public:
     explicit Animation(Card* card);
     ~Animation();
