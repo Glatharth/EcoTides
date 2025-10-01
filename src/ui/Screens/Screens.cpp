@@ -1,5 +1,6 @@
 #include "Screens.hpp"
 #include <cstdlib>
+#include <raylib-cpp.hpp>
 #include "core/game/World.hpp"
 
 extern World* globalWorldInstance;
@@ -17,6 +18,17 @@ Screens::Screens() : current(ScreenState::MENU), showConfirmPopup(false), mouseD
 
     btnDefeatMenu  = { (float)(x + 30), (float)(y + 200), 100, 40 };
     btnDefeatRetry = { (float)(x + w - 130), (float)(y + 200), 100, 40 };
+
+    backgroundImage = new raylib::Image("assets/background.png");
+    backgroundTexture = backgroundImage->LoadTexture();
+}
+
+Screens::~Screens() {
+    backgroundTexture.Unload();
+    if (backgroundImage) {
+        delete backgroundImage;
+        backgroundImage = nullptr;
+    }
 }
 
 void Screens::change(ScreenState next) { current = next; }
@@ -50,7 +62,7 @@ Rectangle Screens::makeButton(int centerX, int startY, int index, int btnWidth, 
 }
 
 void Screens::drawMenuScreen() {
-    ClearBackground(BLUE);
+    // ClearBackground(BLUE);
     drawCenteredText("EcoTides", 80, 50, DARKBLUE);
 
     int centerX = GetScreenWidth() / 2;
@@ -65,7 +77,6 @@ void Screens::drawMenuScreen() {
 
 
 void Screens::drawGameScreen() {
-    ClearBackground(BLUE);
 }
 
 void Screens::drawVictoryScreen() {
@@ -91,7 +102,11 @@ void Screens::drawDefeatScreen() {
 }
 
 void Screens::update(float delta) {
-
+    backgroundAnimTime += delta;
+    if (backgroundAnimTime >= backgroundFrameDuration) {
+        backgroundAnimTime = 0.0f;
+        backgroundFrame = (backgroundFrame + 1) % backgroundFrameCount;
+    }
     if (mouseDebounce) {
         if (!IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
             mouseDebounce = false;
@@ -131,6 +146,13 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 
 
 void Screens::render() {
+    const raylib::Rectangle src = {
+        static_cast<float>(backgroundFrame) * 75.0f,
+        0,
+        static_cast<float>(GetScreenWidth()),
+        static_cast<float>(GetScreenHeight())
+    };
+    backgroundTexture.Draw(src, Vector2{0,0}, WHITE);
     switch (current) {
         case ScreenState::MENU: drawMenuScreen(); break;
         case ScreenState::GAME: drawGameScreen(); break;

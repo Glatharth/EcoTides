@@ -23,7 +23,7 @@ static std::map<EventType, float> eventTypeWeights = {
 };
 
 inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) {
-    FileLoader loader;
+    FileLoader loader = FileLoader("src/xml/cards.xml");
     std::vector<std::pair<int, float>> cardPunishments;
 
     for (int cardId = 1; loader.CardExists(cardId); ++cardId) {

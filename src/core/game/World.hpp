@@ -1,6 +1,5 @@
 #pragma once
 #include <array>
-#include <string>
 #include "ui/Screens/Screens.hpp"
 #include "ui/Powers/Powers.hpp"
 #include <cstdint>
@@ -38,6 +37,7 @@ public:
 
     ScreenState getCurrent() const;
     void retry();
+    FileLoader cardXML;
 
 private:
     Screens* screen;
@@ -46,14 +46,8 @@ private:
     Card* card;
     Animation* animation;
 
-    std::array<int, 4> cardIds;
-    int cardIndex;
-    
-
     bool playerWon;
     bool playerLost;
-
-    FileLoader loader;
 
     void cardSwap();
     void drawPowers();

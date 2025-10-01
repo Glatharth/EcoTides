@@ -2,7 +2,6 @@
 #include <map>
 #include <string>
 #include <pugixml.hpp>
-#include <unordered_map>
 #include <vector>
 
 #include "utils/enum.hpp"
@@ -23,11 +22,10 @@ public:
     bool CardExists(int cardId) const;
     static bool PathExists(const std::string& path);
     void LoadAllCards() const;
-
 private:
     pugi::xml_document doc;
     pugi::xml_parse_result result;
-    bool loaded;
+    bool loaded = false;
     std::string xmlFilePath;
 
     pugi::xml_node FindCardNode(int cardId) const;

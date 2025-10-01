@@ -1,17 +1,15 @@
 #include "World.hpp"
 #include "utils/utils.hpp"
-#include <iostream>
-#include <raylib-cpp.hpp>
 
 World* globalWorldInstance = nullptr;
-std::vector<uint8_t> World::seed{};
+std::vector<uint8_t> World::seed;
 size_t World::currentIndex = 0;
 
 World::World()
     : screen(new Screens()), powers(new Powers()),
       card(nullptr), animation(nullptr),
-      cardIndex(0), playerWon(false), playerLost(false),
-      loader("src/xml/cards.xml") 
+      playerWon(false), playerLost(false),
+      cardXML("src/xml/cards.xml")
 {
     globalWorldInstance = this;
     generateSeed(&seed, GameDifficulty::HARD);
@@ -29,8 +27,7 @@ ScreenState World::getCurrent() const {
 }
 
 void World::startGame() {
-    cardIds = {1,2,3,4};
-    card = new Card(nextCard(), loader);
+    card = new Card(nextCard());
     animation = new Animation(card);
 
     playerWon = false;
@@ -41,7 +38,7 @@ void World::startGame() {
 
 void World::cardSwap() {
     if (card) delete card;
-    card = new Card(nextCard(), loader);
+    card = new Card(nextCard());
     animation->setCard(card);
 }
 
@@ -72,10 +69,7 @@ void World::update(float delta) {
         powers->reset();
         playerWon = false;
         playerLost = false;
-    if (card) delete card;
-    card = new Card(cardIds[cardIndex], loader);
     if (animation) animation->setCard(card);
-    cardIndex = 1;
     }
 
     powers->update(delta);
@@ -83,22 +77,20 @@ void World::update(float delta) {
     if (powers->getValue(ResourceType::ECONOMY) <= 0 ||
     powers->getValue(ResourceType::POPULATION_AWARENESS) <= 0 ||
     powers->getValue(ResourceType::WASTE_COLLECTION) <= 0 ||
-    powers->getValue(ResourceType::WASTE_ACCUMULATION) >= 100)
-{
-    playerLost = true;
-} 
-else if (powers->getValue(ResourceType::ECONOMY) >= 70 &&
-         powers->getValue(ResourceType::POPULATION_AWARENESS) >= 70 &&
-         powers->getValue(ResourceType::WASTE_COLLECTION) >= 70 &&
-         powers->getValue(ResourceType::WASTE_ACCUMULATION) <= 30)
-{
-    playerWon = true;
-}
+    powers->getValue(ResourceType::WASTE_ACCUMULATION) >= 100) {
+        playerLost = true;
+    } else if (powers->getValue(ResourceType::ECONOMY) >= 70 &&
+    powers->getValue(ResourceType::POPULATION_AWARENESS) >= 70 &&
+    powers->getValue(ResourceType::WASTE_COLLECTION) >= 70 &&
+    powers->getValue(ResourceType::WASTE_ACCUMULATION) <= 30) {
+        playerWon = true;
+    }
 
-    if (playerWon && screen->getCurrent() != ScreenState::VICTORY)
+    if (playerWon && screen->getCurrent() != ScreenState::VICTORY) {
         screen->change(ScreenState::VICTORY);
-    else if (playerLost && screen->getCurrent() != ScreenState::DEFEAT)
+    } else if (playerLost && screen->getCurrent() != ScreenState::DEFEAT) {
         screen->change(ScreenState::DEFEAT);
+    }
 }
 
 
@@ -116,7 +108,6 @@ void World::drawPowers() {
 
 void World::draw() {
     BeginDrawing();
-    ClearBackground(BLUE);
 
     screen->render();
 
@@ -124,7 +115,5 @@ void World::draw() {
         drawPowers();            
         if (animation) animation->draw();
     }
-
-    DrawFPS(20, 20);
     EndDrawing();
 }

@@ -1,23 +1,25 @@
 #include "Card.hpp"
 #include <iostream>
+#include "core/game/World.hpp"
 #include "io/FileLoader.hpp"
 
-Card::Card(int cardId, FileLoader& loader) : id(cardId) {
+Card::Card(const int cardId) : id(cardId) {
     InitializeStatic();
+    const FileLoader* fileLoader = &globalWorldInstance->cardXML;
 
-    if (!loader.IsLoaded()) {
+    if (!fileLoader->IsLoaded()) {
         std::cerr << "Error: Could not load XML file" << std::endl;
         return;
     }
 
-    if (!loader.CardExists(cardId)) {
+    if (!fileLoader->CardExists(cardId)) {
         std::cerr << "Error: Card ID " << cardId << " not found in XML" << std::endl;
         return;
     }
 
-    path = loader.GetCardPath(cardId);
-    eventType = loader.GetCardEventType(cardId);
-    resources = loader.GetCardResources(cardId);
+    path = fileLoader->GetCardPath(cardId);
+    eventType = fileLoader->GetCardEventType(cardId);
+    resources = fileLoader->GetCardResources(cardId);
 
     if (!FileLoader::PathExists(path)) {
         std::cerr << "Error: Path does not exist: " << path << std::endl;
@@ -32,8 +34,13 @@ Card::Card(int cardId, FileLoader& loader) : id(cardId) {
 }
 
 Card::~Card() {
-    if (texture.id > 0) texture.Unload();
-    if (image) { image->Unload(); delete image; }
+    if (texture.id > 0) {
+        texture.Unload();
+    }
+    if (image) {
+        image->Unload();
+        delete image;
+    }
 }
 
 bool Card::LoadImage() {
@@ -49,5 +56,7 @@ bool Card::LoadImage() {
 }
 
 void Card::Draw(const raylib::Color& color) const {
-    if (loaded) texture.Draw(position, color);
+    if (loaded) {
+        texture.Draw(position, color);
+    }
 }
