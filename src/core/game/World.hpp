@@ -1,6 +1,5 @@
 #pragma once
 #include <array>
-#include <string>
 #include "ui/Screens/Screens.hpp"
 #include "ui/Powers/Powers.hpp"
 #include <cstdint>
