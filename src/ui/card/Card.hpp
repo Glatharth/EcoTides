@@ -7,11 +7,10 @@
 #include <string>
 #include "utils/enum.hpp"
 
-class FileLoader;
 
 class Card {
 public:
-    explicit Card(int cardId, FileLoader& loader);
+    explicit Card(int cardId);
     ~Card();
 
     void Draw(const raylib::Color& color = WHITE) const;
