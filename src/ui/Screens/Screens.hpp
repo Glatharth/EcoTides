@@ -1,6 +1,6 @@
 #pragma once
 #include "utils/enum.hpp"
-#include <raylib.h>
+#include <raylib-cpp.hpp>
 
 class World;
 
@@ -18,8 +18,16 @@ private:
 
     Rectangle btnDefeatMenu;
     Rectangle btnDefeatRetry;
+
+    raylib::Image* backgroundImage;
+    raylib::Texture backgroundTexture;
+    float backgroundAnimTime = 0.0f;
+    int backgroundFrame = 0;
+    const int backgroundFrameCount = 10;
+    const float backgroundFrameDuration = 0.1f; // 10 fps
 public:
     Screens();
+    ~Screens();
     void change(ScreenState next);
     ScreenState getCurrent() const;
     void update(float delta);
