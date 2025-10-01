@@ -14,6 +14,12 @@ enum class ResourceType {
     WASTE_ACCUMULATION
 };
 
+enum class CardIntensityValue {
+    LOW = 1,
+    MEDIUM = 2,
+    HIGH = 3
+};
+
 enum class ScreenState {
     MENU,
     GAME,

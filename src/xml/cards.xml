@@ -1,174 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cards>
-    <card id="1" path="assets/card1.png" eventType="CREATE" quantity="2">
-        <resource type="Economy" value="3"/>
-        <resource type="Population Awareness" value="-2"/>
-        <resource type="Waste Collection" value="1"/>
-        <resource type="Waste Accumulation" value="4"/>
-        <parents>
-            <parent id="5" steps="3"/>
-            <parent id="12" steps="6"/>
-        </parents>
-    </card>
+  <card id="1" path="assets/card1.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="medium"/>
+    <resource type="Population Awareness" intensity="low"/>
+    <resource type="Waste Collection" intensity="low"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Um acidente envolvendo um barril de óleo ocorreu no Rio Tocantins. Devemos iniciar uma campanha de limpeza?</text>
+  </card>
 
-    <card id="2" path="assets/card2.png" eventType="CREATE" quantity="1">
-        <resource type="Economy" value="-1"/>
-        <resource type="Population Awareness" value="5"/>
-        <resource type="Waste Collection" value="2"/>
-        <resource type="Waste Accumulation" value="-3"/>
-        <parents>
-            <parent id="8" steps="2"/>
-        </parents>
-    </card>
+  <card id="2" path="assets/card2.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="high"/>
+    <resource type="Waste Collection" intensity="medium"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Um tsunami causou dispersão de lixo na costa oeste dos EUA. Você apoia uma campanha de limpeza?</text>
+  </card>
 
-    <card id="3" path="assets/card3.png" eventType="CREATE" quantity="3">
-        <resource type="Economy" value="2"/>
-        <resource type="Population Awareness" value="1"/>
-        <resource type="Waste Collection" value="-4"/>
-        <resource type="Waste Accumulation" value="-1"/>
-    </card>
+  <card id="3" path="assets/card3.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="medium"/>
+    <resource type="Waste Collection" intensity="high"/>
+    <resource type="Waste Accumulation" intensity="medium"/>
+    <text>Houve um incêndio em uma plataforma de petróleo com grande impacto ambiental. Devemos acelerar a limpeza?</text>
+  </card>
 
-    <card id="4" path="assets/card4.png" eventType="CREATE" quantity="2">
-        <resource type="Economy" value="-3"/>
-        <resource type="Population Awareness" value="4"/>
-        <resource type="Waste Collection" value="0"/>
-        <resource type="Waste Accumulation" value="2"/>
-        <parents>
-            <parent id="15" steps="5"/>
-            <parent id="19" steps="1"/>
-        </parents>
-    </card>
+  <card id="4" path="assets/card4.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="high"/>
+    <resource type="Population Awareness" intensity="low"/>
+    <resource type="Waste Collection" intensity="low"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Uma empresa poluidora oferece doação para continuar poluindo. Aceitar o acordo?</text>
+  </card>
 
-    <card id="5" path="assets/card1.png" eventType="CREATE" quantity="1">
-        <resource type="Economy" value="5"/>
-        <resource type="Population Awareness" value="-4"/>
-        <resource type="Waste Collection" value="3"/>
-        <resource type="Waste Accumulation" value="-2"/>
-    </card>
+  <card id="5" path="assets/card5.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="medium"/>
+    <resource type="Population Awareness" intensity="low"/>
+    <resource type="Waste Collection" intensity="low"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Um contêiner com patos de borracha caiu no mar, e a empresa oferece acordo para silêncio. Aceita?</text>
+  </card>
 
-    <card id="6" path="assets/card2.png" eventType="CREATE" quantity="3">
-        <resource type="Economy" value="-2"/>
-        <resource type="Population Awareness" value="3"/>
-        <resource type="Waste Collection" value="-5"/>
-        <resource type="Waste Accumulation" value="1"/>
-        <parents>
-            <parent id="10" steps="4"/>
-        </parents>
-    </card>
+  <card id="6" path="assets/card6.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="high"/>
+    <resource type="Population Awareness" intensity="low"/>
+    <resource type="Waste Collection" intensity="low"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Outra empresa poluidora quer fazer um acordo. Aceita o acordo?</text>
+  </card>
 
-    <card id="7" path="assets/card3.png" eventType="CREATE" quantity="2">
-        <resource type="Economy" value="1"/>
-        <resource type="Population Awareness" value="2"/>
-        <resource type="Waste Collection" value="4"/>
-        <resource type="Waste Accumulation" value="-4"/>
-    </card>
+  <card id="7" path="assets/card7.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="high"/>
+    <resource type="Population Awareness" intensity="medium"/>
+    <resource type="Waste Collection" intensity="medium"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Um político deseja se aliar à sua organização de coleta. Aceita a oferta?</text>
+  </card>
 
-    <card id="8" path="assets/card4.png" eventType="CREATE" quantity="1">
-        <resource type="Economy" value="4"/>
-        <resource type="Population Awareness" value="-1"/>
-        <resource type="Waste Collection" value="-3"/>
-        <resource type="Waste Accumulation" value="5"/>
-        <parents>
-            <parent id="3" steps="7"/>
-            <parent id="17" steps="2"/>
-        </parents>
-    </card>
+  <card id="8" path="assets/card8.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="medium"/>
+    <resource type="Waste Collection" intensity="high"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Um grupo desenvolve um robô para facilitar a limpeza. Você apoia o desenvolvimento?</text>
+  </card>
 
-    <card id="9" path="assets/card1.png" eventType="CREATE" quantity="3">
-        <resource type="Economy" value="-4"/>
-        <resource type="Population Awareness" value="0"/>
-        <resource type="Waste Collection" value="2"/>
-        <resource type="Waste Accumulation" value="-5"/>
-    </card>
+  <card id="9" path="assets/card9.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="high"/>
+    <resource type="Waste Collection" intensity="medium"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Peças de um foguete destruído estão caindo no mar. Mobilizar a limpeza preventiva?</text>
+  </card>
 
-    <card id="10" path="assets/card2.png" eventType="CREATE" quantity="2">
-        <resource type="Economy" value="0"/>
-        <resource type="Population Awareness" value="-3"/>
-        <resource type="Waste Collection" value="5"/>
-        <resource type="Waste Accumulation" value="3"/>
-        <parents>
-            <parent id="14" steps="8"/>
-        </parents>
-    </card>
+  <card id="10" path="assets/card10.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="medium"/>
+    <resource type="Population Awareness" intensity="low"/>
+    <resource type="Waste Collection" intensity="medium"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Negociar esforço de limpeza com líder mundial. Deseja negociar?</text>
+  </card>
 
-    <card id="11" path="assets/card3.png" eventType="CREATE" quantity="1">
-        <resource type="Economy" value="3"/>
-        <resource type="Population Awareness" value="5"/>
-        <resource type="Waste Collection" value="-2"/>
-        <resource type="Waste Accumulation" value="-1"/>
-    </card>
+  <card id="11" path="assets/card11.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="medium"/>
+    <resource type="Waste Collection" intensity="high"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>O Rio do Peixe está com grande acúmulo de lixo. Fazer campanha de limpeza?</text>
+  </card>
 
-    <card id="12" path="assets/card4.png" eventType="CREATE" quantity="3">
-        <resource type="Economy" value="-5"/>
-        <resource type="Population Awareness" value="2"/>
-        <resource type="Waste Collection" value="1"/>
-        <resource type="Waste Accumulation" value="0"/>
-    </card>
+  <card id="12" path="assets/card12.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="high"/>
+    <resource type="Waste Collection" intensity="medium"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Fazer uma campanha de conscientização com vídeo. Aceita?</text>
+  </card>
 
-    <card id="13" path="assets/card1.png" eventType="CREATE" quantity="2">
-        <resource type="Economy" value="2"/>
-        <resource type="Population Awareness" value="-5"/>
-        <resource type="Waste Collection" value="-1"/>
-        <resource type="Waste Accumulation" value="4"/>
-        <parents>
-            <parent id="6" steps="3"/>
-            <parent id="20" steps="1"/>
-        </parents>
-    </card>
+  <card id="13" path="assets/card13.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="medium"/>
+    <resource type="Population Awareness" intensity="high"/>
+    <resource type="Waste Collection" intensity="low"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Comprar um outdoor para aumentar o alcance da campanha. Aceita?</text>
+  </card>
 
-    <card id="14" path="assets/card2.png" eventType="CREATE" quantity="1">
-        <resource type="Economy" value="1"/>
-        <resource type="Population Awareness" value="4"/>
-        <resource type="Waste Collection" value="0"/>
-        <resource type="Waste Accumulation" value="-2"/>
-    </card>
+  <card id="14" path="assets/card14.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="medium"/>
+    <resource type="Waste Collection" intensity="low"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Campanha contra boicote político. Deve lançar contra campanha?</text>
+  </card>
 
-    <card id="15" path="assets/card3.png" eventType="CREATE" quantity="3">
-        <resource type="Economy" value="-1"/>
-        <resource type="Population Awareness" value="-2"/>
-        <resource type="Waste Collection" value="3"/>
-        <resource type="Waste Accumulation" value="5"/>
-    </card>
+  <card id="15" path="assets/card15.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="medium"/>
+    <resource type="Waste Collection" intensity="high"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Novos filtros tecnológicos para limpeza da água. Apoia o desenvolvimento?</text>
+  </card>
 
-    <card id="16" path="assets/card4.png" eventType="CREATE" quantity="2">
-        <resource type="Economy" value="5"/>
-        <resource type="Population Awareness" value="1"/>
-        <resource type="Waste Collection" value="-4"/>
-        <resource type="Waste Accumulation" value="-3"/>
-        <parents>
-            <parent id="9" steps="5"/>
-        </parents>
-    </card>
+  <card id="16" path="assets/card16.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="medium"/>
+    <resource type="Population Awareness" intensity="low"/>
+    <resource type="Waste Collection" intensity="low"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Empresa oferece acordo para remover informações negativas. Aceita?</text>
+  </card>
 
-    <card id="17" path="assets/card1.png" eventType="CREATE" quantity="1">
-        <resource type="Economy" value="-3"/>
-        <resource type="Population Awareness" value="0"/>
-        <resource type="Waste Collection" value="4"/>
-        <resource type="Waste Accumulation" value="2"/>
-    </card>
-
-    <card id="18" path="assets/card2.png" eventType="CREATE" quantity="3">
-        <resource type="Economy" value="4"/>
-        <resource type="Population Awareness" value="-4"/>
-        <resource type="Waste Collection" value="-2"/>
-        <resource type="Waste Accumulation" value="1"/>
-        <parents>
-            <parent id="2" steps="6"/>
-            <parent id="11" steps="4"/>
-        </parents>
-    </card>
-
-    <card id="19" path="assets/card3.png" eventType="CREATE" quantity="2">
-        <resource type="Economy" value="0"/>
-        <resource type="Population Awareness" value="3"/>
-        <resource type="Waste Collection" value="-5"/>
-        <resource type="Waste Accumulation" value="-4"/>
-    </card>
-
-    <card id="20" path="assets/card4.png" eventType="CREATE" quantity="1">
-        <resource type="Economy" value="-2"/>
-        <resource type="Population Awareness" value="-1"/>
-        <resource type="Waste Collection" value="5"/>
-        <resource type="Waste Accumulation" value="3"/>
-    </card>
+  <card id="17" path="assets/card17.png" eventType="CREATE" quantity="1">
+    <resource type="Economy" intensity="low"/>
+    <resource type="Population Awareness" intensity="high"/>
+    <resource type="Waste Collection" intensity="medium"/>
+    <resource type="Waste Accumulation" intensity="low"/>
+    <text>Um youtuber famoso propõe uma colaboração para promover. Aceita?</text>
+  </card>
 </cards>
