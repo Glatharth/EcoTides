@@ -5,7 +5,7 @@ int main() {
     Window window(
         600,             // width
         800,             // height
-        "EcoTides",   // title
+        "EcoTides",      // title
         60,              // target FPS
         true,            // antialiasing
         false,           // resizable

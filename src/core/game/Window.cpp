@@ -2,6 +2,14 @@
 #include "Window.hpp"
 #include <raylib-cpp.hpp>
 
+/**
+*@class Window
+*@brief Represents the game window with customizable settings and an internal game loop.
+*/
+
+/**
+* @brief Constructs a new Window object with the specified settings.
+*/
 Window::Window(int width, int height, const std::string& title, int targetFPS,
                        bool antialiasing, bool resizable, bool fullScreen, bool undecorated,
                        bool alwaysOnTop, bool invisibleBackground, bool alwaysRun,
@@ -12,6 +20,9 @@ Window::Window(int width, int height, const std::string& title, int targetFPS,
       invisibleBackground(invisibleBackground), alwaysRun(alwaysRun),
       loadResources(loadResources), initAudio(initAudio), initialized(false), world(nullptr) {}
 
+/**
+ * @brief Destroys the Window object and frees associated resources.
+ */
 Window::~Window() {
     destroy();
 }
@@ -39,6 +50,9 @@ void Window::init() {
     world = new World();
 }
 
+/**
+ * @brief Initializes the Window, starts the game loop.
+ */
 void Window::run() {
     init();
     while (!WindowShouldClose()) {
@@ -48,6 +62,9 @@ void Window::run() {
     destroy();
 }
 
+/**
+* @brief Destroys the window and stops the audio.
+*/
 void Window::destroy() {
     if (world) {
         delete world;

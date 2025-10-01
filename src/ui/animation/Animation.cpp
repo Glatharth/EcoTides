@@ -3,12 +3,27 @@
 #include <cmath>
 #include <algorithm>
 
+/**
+ * @class Animation
+ * @brief Handles drag-and-drop card animation, including card discard logic and visual effects.
+ *
+ * This class manages the animation state of a Card object based on mouse input.
+ * It supports dragging, discarding, entering new cards, and returning to idle.
+ */
+
+/// @brief Constructor.
+/// @param card Pointer to the Card object this animation will control.
 Animation::Animation(Card* card) : card(card) {}
+
+/// @brief Destructor.
 Animation::~Animation() {}
 
+/// @brief Updates the animation logic based on the current state and user input.
+/// @param delta Time (in seconds) since the last frame.
 void Animation::update(float delta) {
     switch (state) {
         case Idle:
+            // Begin dragging when left mouse button is pressed.
             if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
                 lastMouseX = GetMousePosition().x;
                 dragging = true;
@@ -17,6 +32,8 @@ void Animation::update(float delta) {
             break;
 
         case Dragging:
+            //If left mouse button is pressed moves the card based on mouse position.
+            //Else determines if the card is set to the discarding or returning state.
             if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
                 float mouseX = GetMousePosition().x;
                 float deltaX = mouseX - lastMouseX;
@@ -36,6 +53,7 @@ void Animation::update(float delta) {
             break;
 
         case Discarding:
+            // Moves card offscreen quickly
             dragOffsetX += (dragOffsetX > 0 ? 1 : -1) * discardSpeed * delta;
             if (fabs(dragOffsetX) > Card::GetScreenSize().x + Card::GetSquareSize()) {
                 cardSwapFlag = true;
@@ -45,6 +63,7 @@ void Animation::update(float delta) {
             break;
 
         case Entering: {
+            // Slides new card into the screen    
             float dir = (dragOffsetX > 0) ? -1 : 1;
             dragOffsetX += enterSpeed * delta * dir;
             if ((dir == -1 && dragOffsetX >= 0) || (dir == 1 && dragOffsetX <= 0)) {
@@ -55,6 +74,7 @@ void Animation::update(float delta) {
         }
 
         case Returning: {
+            // Returns card to center
             float returnSpeed = 600.0f;
             float direction = (dragOffsetX > 0) ? -1.0f : 1.0f;
             dragOffsetX += direction * returnSpeed * delta;
@@ -68,6 +88,7 @@ void Animation::update(float delta) {
     }
 }
 
+/// @brief Draws the card with appropriate transformations and overlay text.
 void Animation::draw() {
     if (!card || !card->IsLoaded()) return;
 
@@ -92,6 +113,7 @@ void Animation::draw() {
 
     DrawTexturePro(tex, sourceRec, destRec, origin, rotation, WHITE);
 
+    // Draw "SIM" or "NÃO" overlays depending on drag direction
     auto drawOverlay = [&](float factor, const char* text, Color color){
         factor = std::min(factor, 1.0f);
         Rectangle overlayRect = { destRec.x - 45, destRec.y - 420, 100, 50 };
@@ -104,6 +126,13 @@ void Animation::draw() {
     else if (normDrag < -0.5f) drawOverlay((-normDrag - 0.5f) * 1.4f, "NÃO", RED);
 }
 
+/// @brief Sets a new card to animate.
+/// @param newCard Pointer to the new Card.
 void Animation::setCard(Card* newCard) { card = newCard; }
+
+/// @brief Checks whether the current animation has triggered a card swap.
+/// @return true if a new card should be loaded; false otherwise.
 bool Animation::needsCardSwap() const { return cardSwapFlag; }
+
+/// @brief Resets the swap flag to false after card change is handled.
 void Animation::resetSwap() { cardSwapFlag = false; }
