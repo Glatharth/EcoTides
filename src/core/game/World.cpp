@@ -69,7 +69,6 @@ void World::update(float delta) {
         powers->reset();
         playerWon = false;
         playerLost = false;
-    if (card) delete card;
     if (animation) animation->setCard(card);
     }
 
