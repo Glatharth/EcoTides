@@ -23,6 +23,14 @@ Screens::Screens() : current(ScreenState::MENU), showConfirmPopup(false), mouseD
     backgroundTexture = backgroundImage->LoadTexture();
 }
 
+Screens::~Screens() {
+    backgroundTexture.Unload();
+    if (backgroundImage) {
+        delete backgroundImage;
+        backgroundImage = nullptr;
+    }
+}
+
 void Screens::change(ScreenState next) { current = next; }
 ScreenState Screens::getCurrent() const { return current; }
 
@@ -138,7 +146,12 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 
 
 void Screens::render() {
-    raylib::Rectangle src = { backgroundFrame * 75.0f, 0, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()) };
+    const raylib::Rectangle src = {
+        static_cast<float>(backgroundFrame) * 75.0f,
+        0,
+        static_cast<float>(GetScreenWidth()),
+        static_cast<float>(GetScreenHeight())
+    };
     backgroundTexture.Draw(src, Vector2{0,0}, WHITE);
     switch (current) {
         case ScreenState::MENU: drawMenuScreen(); break;

@@ -27,6 +27,7 @@ private:
     const float backgroundFrameDuration = 0.1f; // 10 fps
 public:
     Screens();
+    ~Screens();
     void change(ScreenState next);
     ScreenState getCurrent() const;
     void update(float delta);
