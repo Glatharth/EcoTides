@@ -55,6 +55,24 @@ void World::cardSwap() {
     animation->setCard(card);
 }
 
+int World::nextCard() {
+    if (seed.empty()) return 1;
+    if (currentIndex == seed.size()) {
+        if (powers->getValue(ResourceType::WASTE_COLLECTION) > 80 && powers->getValue(ResourceType::WASTE_ACCUMULATION) <= 80) {
+            screen->change(ScreenState::VICTORY);
+        } else {
+            screen->change(ScreenState::DEFEAT);
+        }
+        return 0;
+    }
+
+    const uint8_t currentId = seed[currentIndex];
+
+    currentIndex = currentIndex + 1;
+
+    return currentId;
+}
+
 void World::retry() {
     if (card) { delete card; card = nullptr; }
     if (animation) { delete animation; animation = nullptr; }

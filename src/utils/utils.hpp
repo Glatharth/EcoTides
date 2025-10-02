@@ -117,6 +117,9 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
 
     if (result.size() < total) result = orderedIds;
     for (int id : result) {
+        if (id == 0 ) {
+            continue;
+        }
         seed->push_back(static_cast<uint8_t>(id));
     }
 }
