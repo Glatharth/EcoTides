@@ -56,18 +56,67 @@ EventType FileLoader::GetCardEventType(int cardId) const {
     return EventType::UNKNOWN;
 }
 
-std::map<ResourceType, int> FileLoader::GetCardResources(int cardId) const {
+std::map<ResourceType, int> FileLoader::GetCardResourcesYes(int cardId) const {
     std::map<ResourceType, int> resources;
     const pugi::xml_node card = FindCardNode(cardId);
     if (!card) return resources;
+
+    // Mapeamento de intensidade string para valores numéricos
+    auto intensityToValue = [](const std::string& intensity) -> int {
+        if (intensity == "negativehigh") return -3*3;
+        if (intensity == "negativemedium") return -2*3;
+        if (intensity == "negativelow") return -1*3;
+        if (intensity == "none") return 0;
+        if (intensity == "low") return 1*3;
+        if (intensity == "medium") return 2*3;
+        if (intensity == "high") return 3*3;
+        return 0; // default para intensidade desconhecida
+    };
+
+    // Ler recursos para resposta "Sim"
     for (pugi::xml_node res : card.child("resourcesYes").children("resource")) {
         std::string typeStr = res.attribute("type").as_string();
-        int value = res.attribute("intensity").as_int();
+        std::string intensityStr = res.attribute("intensity").as_string();
+        int value = intensityToValue(intensityStr);
+
         if (typeStr == "Economy") resources[ResourceType::ECONOMY] = value;
         else if (typeStr == "Population Awareness") resources[ResourceType::POPULATION_AWARENESS] = value;
         else if (typeStr == "Waste Collection") resources[ResourceType::WASTE_COLLECTION] = value;
         else if (typeStr == "Waste Accumulation") resources[ResourceType::WASTE_ACCUMULATION] = value;
     }
+
+    return resources;
+}
+
+std::map<ResourceType, int> FileLoader::GetCardResourcesNo(int cardId) const {
+    std::map<ResourceType, int> resources;
+    const pugi::xml_node card = FindCardNode(cardId);
+    if (!card) return resources;
+
+    // Mapeamento de intensidade string para valores numéricos
+    auto intensityToValue = [](const std::string& intensity) -> int {
+        if (intensity == "negativehigh") return -3*3;
+        if (intensity == "negativemedium") return -2*3;
+        if (intensity == "negativelow") return -1*3;
+        if (intensity == "none") return 0;
+        if (intensity == "low") return 1*3;
+        if (intensity == "medium") return 2*3;
+        if (intensity == "high") return 3*3;
+        return 0; // default para intensidade desconhecida
+    };
+
+    // Ler recursos para resposta "Não"
+    for (pugi::xml_node res : card.child("resourcesNo").children("resource")) {
+        std::string typeStr = res.attribute("type").as_string();
+        std::string intensityStr = res.attribute("intensity").as_string();
+        int value = intensityToValue(intensityStr);
+
+        if (typeStr == "Economy") resources[ResourceType::ECONOMY] = value;
+        else if (typeStr == "Population Awareness") resources[ResourceType::POPULATION_AWARENESS] = value;
+        else if (typeStr == "Waste Collection") resources[ResourceType::WASTE_COLLECTION] = value;
+        else if (typeStr == "Waste Accumulation") resources[ResourceType::WASTE_ACCUMULATION] = value;
+    }
+
     return resources;
 }
 

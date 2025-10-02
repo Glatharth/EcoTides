@@ -29,7 +29,7 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
     std::vector<std::pair<int, float>> cardPunishments;
 
     for (int cardId = 1; loader.CardExists(cardId); ++cardId) {
-        auto resources = loader.GetCardResources(cardId);
+        auto resources = loader.GetCardResourcesNo(cardId);
         float punishment = 0.0f;
         for (const auto& [type, value] : resources) {
             float weight = resourceTypeWeights[type];

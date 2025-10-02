@@ -22,8 +22,9 @@ public:
     int GetId() const { return id; }
     std::string GetPath() const { return path; }
     EventType GetEventType() const { return eventType; }
-    const std::map<ResourceType, int>& GetResources() const { return resources; }
-    int GetResource(const ResourceType type) const;
+    const std::map<ResourceType, int>& GetResourcesYes() const { return resourcesYes; }
+    const std::map<ResourceType, int>& GetResourcesNo() const { return resourcesNo; }
+    // int GetResource(ResourceType type) const;
     bool IsLoaded() const { return loaded; }
 
     [[nodiscard]] const std::string& getText() const;
@@ -44,7 +45,8 @@ private:
     int id = -1;
     std::string path;
     EventType eventType;
-    std::map<ResourceType, int> resources;
+    std::map<ResourceType, int> resourcesYes;
+    std::map<ResourceType, int> resourcesNo;
     std::string text;
     bool loaded = false;
 

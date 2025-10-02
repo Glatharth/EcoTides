@@ -39,6 +39,19 @@ void World::startGame() {
 void World::cardSwap() {
     if (card) delete card;
     card = new Card(nextCard());
+    if (animation->option) {
+        for (auto it = card->GetResourcesYes().begin(); it != card->GetResourcesYes().end(); ++it) {
+            ResourceType type = it->first;
+            int value = it->second;
+            powers->applyChange(type, value);
+        }
+    } else {
+        for (auto it = card->GetResourcesNo().begin(); it != card->GetResourcesNo().end(); ++it) {
+            ResourceType type = it->first;
+            int value = it->second;
+            powers->applyChange(type, value);
+        }
+    }
     animation->setCard(card);
 }
 

@@ -17,7 +17,8 @@ Card::Card(int cardId) : id(cardId) {
 
     path = fileLoader.GetCardPath(cardId);
     eventType = fileLoader.GetCardEventType(cardId);
-    resources = fileLoader.GetCardResources(cardId);
+    resourcesYes = fileLoader.GetCardResourcesYes(cardId);
+    resourcesNo = fileLoader.GetCardResourcesYes(cardId);
     text = fileLoader.GetCardText(cardId);
 
     if (!FileLoader::PathExists(path)) {
@@ -75,10 +76,10 @@ void Card::UpdateScreenSize(const raylib::Vector2& newSize) {
     UpdatePosition();
 }
 
-int Card::GetResource(const ResourceType type) const {
-    const auto it = resources.find(type);
-    return (it != resources.end()) ? it->second : 0;
-}
+// int Card::GetResource(const ResourceType type) const {
+//     const auto it = resources.find(type);
+//     return (it != resources.end()) ? it->second : 0;
+// }
 
 const std::string& Card::getText() const {
     return this->text;

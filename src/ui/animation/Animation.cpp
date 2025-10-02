@@ -67,7 +67,8 @@ void Animation::update(float delta) {
     }
 }
 
-void Animation::draw() {
+void Animation::draw()
+{
     if (!card || !card->IsLoaded()) return;
 
     float normDrag = dragOffsetX / 250.0f;
@@ -99,8 +100,13 @@ void Animation::draw() {
         DrawText(text, (int)(overlayRect.x + 10), (int)(overlayRect.y + 10), 40, ColorAlpha(color, factor));
     };
 
-    if (normDrag > 0.5f) drawOverlay((normDrag - 0.5f) * 1.4f, "SIM", GREEN);
-    else if (normDrag < -0.5f) drawOverlay((-normDrag - 0.5f) * 1.4f, "NÃO", RED);
+    if (normDrag > 0.5f) {
+        drawOverlay((normDrag - 0.5f) * 1.4f, "SIM", GREEN);
+        option = true;
+    } else if (normDrag < -0.5f) {
+        drawOverlay((-normDrag - 0.5f) * 1.4f, "NÃO", RED);
+        option = false;
+    }
 
     const std::string& cardText = card->getText();
     if (!cardText.empty()) {

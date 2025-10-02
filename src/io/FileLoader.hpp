@@ -19,7 +19,8 @@ public:
     [[nodiscard]] bool CardExists(int cardId) const;
     [[nodiscard]] std::string GetCardPath(int cardId) const;
     [[nodiscard]] EventType GetCardEventType(int cardId) const;
-    [[nodiscard]] std::map<ResourceType, int> GetCardResources(int cardId) const;
+    std::map<ResourceType, int> GetCardResourcesYes(int cardId) const;
+    std::map<ResourceType, int> GetCardResourcesNo(int cardId) const;
     [[nodiscard]] std::string GetCardText(int cardId) const;
     [[nodiscard]] int GetCardQuantity(int cardId) const;
     [[nodiscard]] std::vector<std::pair<int, int>> GetCardParents(int cardId) const;
