@@ -115,7 +115,7 @@ void Animation::draw() {
         };
         Rectangle bgRect = { textPosition.x - 20, textPosition.y - 10, textMaxWidth + 40, 160 };
         DrawRectangleRec(bgRect, Fade(BLACK, 0.6f));
-        DrawTextWrapped(font, cardText.c_str(), textPosition, textMaxWidth, fontSize, lineSpacing, DARKBLUE);
+        DrawTextWrapped(font, cardText.c_str(), textPosition, textMaxWidth, fontSize, lineSpacing, WHITE);
     }
 }
 
