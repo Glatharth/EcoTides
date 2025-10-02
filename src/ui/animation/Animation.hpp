@@ -16,6 +16,8 @@ public:
     void update(float delta);
     void draw();
 
+    bool option;
+
 private:
     Card* card;
     float dragOffsetX = 0.0f;
