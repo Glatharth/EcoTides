@@ -1,9 +1,11 @@
 #include "Animation.hpp"
 #include "ui/card/Card.hpp"
+#include "utils/utils.hpp"
 #include <cmath>
 #include <algorithm>
 
 Animation::Animation(Card* card) : card(card) {}
+
 Animation::~Animation() {}
 
 void Animation::update(float delta) {
@@ -21,10 +23,8 @@ void Animation::update(float delta) {
                 float mouseX = GetMousePosition().x;
                 float deltaX = mouseX - lastMouseX;
                 dragOffsetX += deltaX;
-
                 float maxDrag = 250.0f;
                 dragOffsetX = std::clamp(dragOffsetX, -maxDrag, maxDrag);
-
                 lastMouseX = mouseX;
             } else {
                 dragging = false;
@@ -58,8 +58,7 @@ void Animation::update(float delta) {
             float returnSpeed = 600.0f;
             float direction = (dragOffsetX > 0) ? -1.0f : 1.0f;
             dragOffsetX += direction * returnSpeed * delta;
-
-            if ((direction < 0 && dragOffsetX < 0) || (direction > 0 && dragOffsetX > 0) || fabs(dragOffsetX) < 1.0f) {
+            if ((direction < 0 && dragOffsetX <= 0) || (direction > 0 && dragOffsetX >= 0) || fabs(dragOffsetX) < 1.0f) {
                 dragOffsetX = 0.0f;
                 state = Idle;
             }
@@ -84,8 +83,8 @@ void Animation::draw() {
     float adjustX = 220.0f, adjustY = 450.0f;
 
     Rectangle destRec = {
-        position.x - origin.x + adjustX,
-        position.y - origin.y + adjustY,
+        position.x + adjustX,
+        position.y + adjustY,
         (float)tex.width,
         (float)tex.height
     };
@@ -102,8 +101,26 @@ void Animation::draw() {
 
     if (normDrag > 0.5f) drawOverlay((normDrag - 0.5f) * 1.4f, "SIM", GREEN);
     else if (normDrag < -0.5f) drawOverlay((-normDrag - 0.5f) * 1.4f, "NÃO", RED);
+
+    const std::string& cardText = card->getText();
+    if (!cardText.empty()) {
+        Font font = GetFontDefault();
+        float fontSize = 20.0f;
+        float lineSpacing = 5.0f;
+        Vector2 screenSize = Card::GetScreenSize();
+        float textMaxWidth = screenSize.x * 0.8f;
+        Vector2 textPosition = {
+            (screenSize.x - textMaxWidth) / 2.0f,
+            screenSize.y * 0.025f
+        };
+        Rectangle bgRect = { textPosition.x - 20, textPosition.y - 10, textMaxWidth + 40, 160 };
+        DrawRectangleRec(bgRect, Fade(BLACK, 0.6f));
+        DrawTextWrapped(font, cardText.c_str(), textPosition, textMaxWidth, fontSize, lineSpacing, DARKBLUE);
+    }
 }
 
 void Animation::setCard(Card* newCard) { card = newCard; }
+
 bool Animation::needsCardSwap() const { return cardSwapFlag; }
+
 void Animation::resetSwap() { cardSwapFlag = false; }

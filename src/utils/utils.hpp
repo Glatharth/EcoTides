@@ -1,10 +1,12 @@
 #pragma once
+
 #include <sstream>
 #include <vector>
 #include <algorithm>
 #include <iomanip>
 #include <map>
 #include <random>
+#include "raylib.h"
 #include "enum.hpp"
 #include "io/FileLoader.hpp"
 
@@ -70,25 +72,22 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
         orderedIds.insert(orderedIds.end(), low.begin(), low.end());
     }
 
-    // --- Parent scheduling ---
     std::map<int, int> counts;
     for (int id : orderedIds) counts[id]++;
     std::vector<int> uniqueIds;
     for (const auto& [id, _] : counts) uniqueIds.push_back(id);
 
-    std::map<int, std::vector<int>> scheduledParents; // step -> list of parent ids
+    std::map<int, std::vector<int>> scheduledParents;
     std::vector<int> result;
     int lastId = -1;
     int total = orderedIds.size();
     int step = 0;
     for (int i = 0; i < total; ++i) {
-        // Insert scheduled parents for this step
         if (scheduledParents.count(step)) {
             for (int pid : scheduledParents[step]) {
                 result.push_back(pid);
             }
         }
-        // Find next card
         int nextId = -1, maxCount = -1;
         for (int id : uniqueIds) {
             if (id != lastId && counts[id] > maxCount) {
@@ -109,7 +108,6 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
         counts[nextId]--;
         lastId = nextId;
 
-        // Schedule parents
         auto parents = loader.GetCardParents(nextId);
         for (const auto& [parentId, steps] : parents) {
             scheduledParents[step + steps].push_back(parentId);
@@ -117,7 +115,6 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
         step++;
     }
 
-    // Fallback if result size is less than total
     if (result.size() < total) result = orderedIds;
     for (int id : result) {
         seed->push_back(static_cast<uint8_t>(id));
@@ -131,4 +128,45 @@ inline std::string getSeedCardIdsAsString(const std::vector<uint8_t>& seed) {
         if (i + 1 < seed.size()) oss << " ,";
     }
     return oss.str();
+}
+
+inline void DrawTextWrapped(Font font, const char* text, Vector2 position, float maxWidth, float fontSize, float lineSpacing, Color tint) {
+    std::string str(text);
+    std::vector<std::string> lines;
+    std::string currentLine;
+    std::string word;
+
+    for (size_t i = 0; i < str.length(); ++i) {
+        if (str[i] == ' ' || str[i] == '\n' || i == str.length() - 1) {
+            if (i == str.length() - 1 && str[i] != ' ' && str[i] != '\n') {
+                word += str[i];
+            }
+
+            if (!word.empty()) {
+                std::string testLine = currentLine.empty() ? word : currentLine + " " + word;
+                if (MeasureTextEx(font, testLine.c_str(), fontSize, 1).x > maxWidth) {
+                    lines.push_back(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+                word.clear();
+            }
+
+            if (str[i] == '\n') {
+                lines.push_back(currentLine);
+                currentLine.clear();
+            }
+        } else {
+            word += str[i];
+        }
+    }
+
+    if (!currentLine.empty()) {
+        lines.push_back(currentLine);
+    }
+
+    for (size_t i = 0; i < lines.size(); ++i) {
+        DrawTextEx(font, lines[i].c_str(), { position.x, position.y + i * (fontSize + lineSpacing) }, fontSize, 1, tint);
+    }
 }
