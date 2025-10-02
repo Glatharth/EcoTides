@@ -12,22 +12,9 @@ Screens::Screens() : current(ScreenState::MENU), showConfirmPopup(false), mouseD
     btnPopupContinue = { (float)(x + 30), (float)(y + 90), 100, 40 };
     btnPopupMenu     = { (float)(x + w - 130), (float)(y + 90), 100, 40 };
 
-    btnVictoryMenu  = { (float)(x + 30), (float)(y + 200), 100, 40 };
-    btnVictoryRetry = { (float)(x + w - 130), (float)(y + 200), 100, 40 };
-
-    btnDefeatMenu  = { (float)(x + 30), (float)(y + 200), 100, 40 };
-    btnDefeatRetry = { (float)(x + w - 130), (float)(y + 200), 100, 40 };
-
     backgroundImage = new raylib::Image("assets/background.png");
     backgroundTexture = backgroundImage->LoadTexture();
-}
 
-Screens::~Screens() {
-    backgroundTexture.Unload();
-    if (backgroundImage) {
-        delete backgroundImage;
-        backgroundImage = nullptr;
-    }
     texPlay     = LoadTexture("assets/PLAYBUTTON.png");
     texPlayPressed = LoadTexture("assets/PLAYPRESSED.png");
     texExit     = LoadTexture("assets/EXITBUTTON.png");
@@ -38,6 +25,14 @@ Screens::~Screens() {
     texContinuePressed = LoadTexture("assets/CONTINUEPRESSED.png");
     texWin = LoadTexture("assets/WINSCREEN.png");
     texLose = LoadTexture("assets/LOSESCREEN.png");
+}
+
+Screens::~Screens() {
+    backgroundTexture.Unload();
+    if (backgroundImage) {
+        delete backgroundImage;
+        backgroundImage = nullptr;
+    }
 
     UnloadTexture(texPlay);
     UnloadTexture(texPlayPressed);
@@ -76,7 +71,7 @@ Rectangle Screens::makeButton(int centerX,int startY,int index,int btnWidth,int 
 
 void Screens::drawMenuScreen() {
     // ClearBackground(BLUE);
-    drawCenteredText("EcoTides", 80, 50, DARKBLUE);
+    drawCenteredText("EcoTides", 80, 50, WHITE);
 
     int centerX = GetScreenWidth()/2;
     int startY  = GetScreenHeight()/2;
