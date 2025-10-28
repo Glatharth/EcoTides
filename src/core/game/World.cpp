@@ -12,7 +12,6 @@ World::World()
       cardXML("src/xml/cards.xml")
 {
     globalWorldInstance = this;
-    generateSeed(&seed, GameDifficulty::HARD);
 }
 
 World::~World() {
@@ -27,6 +26,8 @@ ScreenState World::getCurrent() const {
 }
 
 void World::startGame() {
+    generateSeed(&seed, GameDifficulty::NORMAL);
+    printf("%s", getSeedCardIdsAsString(seed).c_str());
     card = new Card(nextCard());
     animation = new Animation(card);
 
