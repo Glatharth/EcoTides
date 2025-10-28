@@ -28,15 +28,21 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
     FileLoader loader = FileLoader("src/xml/cards.xml");
     std::vector<std::pair<int, float>> cardPunishments;
 
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::uniform_real_distribution<> randomFactorDist(-0.1f, 0.1f);
+
     for (int cardId = 1; loader.CardExists(cardId); ++cardId) {
         auto resources = loader.GetCardResourcesNo(cardId);
         float punishment = 0.0f;
         for (const auto& [type, value] : resources) {
             float weight = resourceTypeWeights[type];
-            if (type == ResourceType::WASTE_ACCUMULATION) {
-                punishment += value * weight;
+            float random_factor = 1.0f + randomFactorDist(g);
+
+            if (type == ResourceType::WASTE_ACCUMULATION || type == ResourceType::WASTE_COLLECTION) {
+                punishment += (value * weight) * random_factor;
             } else {
-                punishment -= value * weight;
+                punishment -= (value * weight) * random_factor;
             }
         }
         EventType eventType = loader.GetCardEventType(cardId);
@@ -49,24 +55,30 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
     }
 
     std::vector<int> low, medium, high;
+    float low_threshold = 1.0f;
+    float medium_threshold = 2.0f;
+
     for (const auto& [cardId, score] : cardPunishments) {
-        if (score < 1.0f) low.push_back(cardId);
-        else if (score < 2.0f) medium.push_back(cardId);
+        if (score < low_threshold) low.push_back(cardId);
+        else if (score < medium_threshold) medium.push_back(cardId);
         else high.push_back(cardId);
     }
 
-    std::random_device rd;
-    std::mt19937 g(rd());
     std::shuffle(low.begin(), low.end(), g);
     std::shuffle(medium.begin(), medium.end(), g);
     std::shuffle(high.begin(), high.end(), g);
 
     std::vector<int> orderedIds;
-    if (difficulty == GameDifficulty::NORMAL || difficulty == GameDifficulty::HARD) {
+    if (difficulty == GameDifficulty::NORMAL) {
         orderedIds.insert(orderedIds.end(), low.begin(), low.end());
         orderedIds.insert(orderedIds.end(), medium.begin(), medium.end());
         orderedIds.insert(orderedIds.end(), high.begin(), high.end());
-    } else {
+    } else if (difficulty == GameDifficulty::HARD) {
+        orderedIds.insert(orderedIds.end(), low.begin(), low.end());
+        orderedIds.insert(orderedIds.end(), medium.begin(), medium.end());
+        orderedIds.insert(orderedIds.end(), high.begin(), high.end());
+        std::shuffle(orderedIds.begin(), orderedIds.end(), g);
+    } else { // HARDCORE
         orderedIds.insert(orderedIds.end(), high.begin(), high.end());
         orderedIds.insert(orderedIds.end(), medium.begin(), medium.end());
         orderedIds.insert(orderedIds.end(), low.begin(), low.end());
@@ -76,6 +88,8 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
     for (int id : orderedIds) counts[id]++;
     std::vector<int> uniqueIds;
     for (const auto& [id, _] : counts) uniqueIds.push_back(id);
+
+    std::shuffle(uniqueIds.begin(), uniqueIds.end(), g);
 
     std::map<int, std::vector<int>> scheduledParents;
     std::vector<int> result;
@@ -116,6 +130,8 @@ inline void generateSeed(std::vector<uint8_t>* seed, GameDifficulty difficulty) 
     }
 
     if (result.size() < total) result = orderedIds;
+    
+    seed->clear();
     for (int id : result) {
         if (id == 0 ) {
             continue;

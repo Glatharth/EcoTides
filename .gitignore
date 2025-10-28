@@ -1,7 +1,14 @@
-include
-lib
-bin
-.idea
+# Build artifacts
+*.o
+*.a
+
+# Directories
+/include/
+/lib/
+/bin/
+/vendor/
+
+# IDE and OS specific
+/.idea/
+/.vscode/
 .DS_Store
-.vscode
-vendor
