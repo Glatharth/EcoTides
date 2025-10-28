@@ -3,10 +3,9 @@
 #define ECOTIDES_CARD_HPP
 
 #include <map>
-#include <raylib-cpp.hpp>
 #include <string>
+#include <raylib-cpp.hpp>
 #include "utils/enum.hpp"
-
 
 class Card {
 public:
@@ -14,47 +13,28 @@ public:
     ~Card();
 
     void Draw(const raylib::Color& color = WHITE) const;
-    void SetFilter(TextureFilter filter) { texture.SetFilter(filter); }
-
+    void SetFilter(TextureFilter filter);
     const raylib::Texture& GetTexture() const { return texture; }
-
-    static void UpdateScreenSize(const raylib::Vector2& newSize) {
-        screenSize = newSize;
-        UpdatePosition();
-    }
-    static raylib::Vector2 GetScreenSize() { return screenSize; }
-    static raylib::Vector2 GetPosition() { return position; }
-    static int GetSquareSize() { return squareSize; }
-
+    static void UpdateScreenSize(const raylib::Vector2& newSize);
+    static raylib::Vector2 GetScreenSize();
+    static raylib::Vector2 GetPosition();
+    static int GetSquareSize();
     int GetId() const { return id; }
     std::string GetPath() const { return path; }
     EventType GetEventType() const { return eventType; }
-    const std::map<ResourceType, int>& GetResources() const { return resources; }
-    int GetResource(const ResourceType type) const {
-        const auto it = resources.find(type);
-        return (it != resources.end()) ? it->second : 0;
-    }
+    const std::map<ResourceType, int>& GetResourcesYes() const { return resourcesYes; }
+    const std::map<ResourceType, int>& GetResourcesNo() const { return resourcesNo; }
+    // int GetResource(ResourceType type) const;
     bool IsLoaded() const { return loaded; }
+
+    [[nodiscard]] const std::string& getText() const;
+    void setText(const std::string& newText);
 
     friend class Animation;
 
 private:
-    static void InitializeStatic() {
-        if (!initialized) {
-            screenSize.x = static_cast<float>(GetScreenWidth());
-            screenSize.y = static_cast<float>(GetScreenHeight());
-            UpdatePosition();
-            initialized = true;
-        }
-    }
-
-    static void UpdatePosition() {
-        position = raylib::Vector2(
-            screenSize.x / 2.0f,
-            (screenSize.y + squareSize) / 2.0f
-        );
-    }
-
+    static void InitializeStatic();
+    static void UpdatePosition();
     bool LoadImage();
 
     inline static raylib::Vector2 screenSize = {0, 0};
@@ -65,7 +45,9 @@ private:
     int id = -1;
     std::string path;
     EventType eventType;
-    std::map<ResourceType, int> resources;
+    std::map<ResourceType, int> resourcesYes;
+    std::map<ResourceType, int> resourcesNo;
+    std::string text;
     bool loaded = false;
 
     raylib::Image* image = nullptr;

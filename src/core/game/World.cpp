@@ -39,7 +39,38 @@ void World::startGame() {
 void World::cardSwap() {
     if (card) delete card;
     card = new Card(nextCard());
+    if (animation->option) {
+        for (auto it = card->GetResourcesYes().begin(); it != card->GetResourcesYes().end(); ++it) {
+            ResourceType type = it->first;
+            int value = it->second;
+            powers->applyChange(type, value);
+        }
+    } else {
+        for (auto it = card->GetResourcesNo().begin(); it != card->GetResourcesNo().end(); ++it) {
+            ResourceType type = it->first;
+            int value = it->second;
+            powers->applyChange(type, value);
+        }
+    }
     animation->setCard(card);
+}
+
+int World::nextCard() {
+    if (seed.empty()) return 1;
+    if (currentIndex == seed.size()) {
+        if (powers->getValue(ResourceType::WASTE_COLLECTION) > 80 && powers->getValue(ResourceType::WASTE_ACCUMULATION) <= 80) {
+            screen->change(ScreenState::VICTORY);
+        } else {
+            screen->change(ScreenState::DEFEAT);
+        }
+        return 0;
+    }
+
+    const uint8_t currentId = seed[currentIndex];
+
+    currentIndex = currentIndex + 1;
+
+    return currentId;
 }
 
 void World::retry() {
