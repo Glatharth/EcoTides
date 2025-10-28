@@ -11,7 +11,7 @@ private:
     ScreenState current;
     bool showConfirmPopup;
     bool mouseDebounce;
-   
+
     Rectangle btnPopupContinue;
     Rectangle btnPopupMenu;
 
@@ -27,7 +27,15 @@ private:
     int backgroundFrame = 0;
     const int backgroundFrameCount = 10;
     const float backgroundFrameDuration = 0.1f; // 10 fps
-    
+
+    // Tutorial
+    int tutorialPage;
+    Texture2D texTutorialButton;
+    Texture2D texTutorialButtonPressed;
+    Texture2D texArrowRight;
+    Texture2D texArrowLeft;
+    Texture2D texTutorialCard;
+
 public:
     Screens();
     ~Screens();
@@ -59,4 +67,5 @@ public:
     void drawGameScreen();
     void drawVictoryScreen();
     void drawDefeatScreen();
+    void drawTutorialScreen(); // função do tutorial
 };
