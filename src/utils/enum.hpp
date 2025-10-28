@@ -18,7 +18,8 @@ enum class ScreenState {
     MENU,
     GAME,
     VICTORY,
-    DEFEAT
+    DEFEAT,
+    TUTORIAL
 };
 
 enum class GameDifficulty {
