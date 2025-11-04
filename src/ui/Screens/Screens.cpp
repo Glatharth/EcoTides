@@ -211,7 +211,7 @@ void Screens::drawTutorialScreen() {
     ClearBackground({30, 30, 60, 255});
 
     int centerX = GetScreenWidth() / 2;
-    int centerY = GetScreenHeight() / 2;
+    float centerY = GetScreenHeight() / 2.0f;
 
     // Desenhar página atual
     switch (tutorialPage) {
@@ -235,9 +235,9 @@ void Screens::drawTutorialScreen() {
     }
 
     // Setas de navegação
-    float arrowY = GetScreenHeight() - texArrowRight.height - 20;
-    Rectangle btnLeft  = { 50, arrowY, static_cast<float>(texArrowLeft.width), static_cast<float>(texArrowLeft.height) };
-    Rectangle btnRight = { GetScreenWidth() - texArrowRight.width - 50, arrowY, static_cast<float>(texArrowRight.width), static_cast<float>(texArrowRight.height) };
+    float arrowY = static_cast<float>(GetScreenHeight()) - texArrowRight.height - 20;
+    Rectangle btnLeft  = { 50.0f, arrowY, static_cast<float>(texArrowLeft.width), static_cast<float>(texArrowLeft.height) };
+    Rectangle btnRight = { static_cast<float>(GetScreenWidth() - texArrowRight.width - 50), arrowY, static_cast<float>(texArrowRight.width), static_cast<float>(texArrowRight.height) };
 
     Vector2 mouse = GetMousePosition();
     if (CheckCollisionPointRec(mouse, btnLeft) && IsMouseButtonDown(MOUSE_LEFT_BUTTON))
