@@ -236,8 +236,8 @@ void Screens::drawTutorialScreen() {
 
     // Setas de navegação
     float arrowY = GetScreenHeight() - texArrowRight.height - 20;
-    Rectangle btnLeft  = { 50, arrowY, (float)texArrowLeft.width, (float)texArrowLeft.height };
-    Rectangle btnRight = { GetScreenWidth() - texArrowRight.width - 50, arrowY, (float)texArrowRight.width, (float)texArrowRight.height };
+    Rectangle btnLeft  = { 50, arrowY, static_cast<float>(texArrowLeft.width), static_cast<float>(texArrowLeft.height) };
+    Rectangle btnRight = { GetScreenWidth() - texArrowRight.width - 50, arrowY, static_cast<float>(texArrowRight.width), static_cast<float>(texArrowRight.height) };
 
     Vector2 mouse = GetMousePosition();
     if (CheckCollisionPointRec(mouse, btnLeft) && IsMouseButtonDown(MOUSE_LEFT_BUTTON))
